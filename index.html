@@ -682,66 +682,72 @@ body::before {
 
 .nav-center { display: flex; flex-direction: column; align-items: center; gap: 5px; }
 
-/* Unified agenda nav strip */
+/* ── UNIFIED AGENDA NAV STRIP ── */
 .dot-row {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
   justify-content: center;
 }
 
-/* Dot group — inline cluster for current section's pages */
-.dot-group {
-  display: flex;
-  gap: 7px;
-  align-items: center;
-  padding: 0 4px;
-  border-left: 1px solid rgba(201,168,76,0.2);
-  border-right: 1px solid rgba(201,168,76,0.2);
-  margin: 0 2px;
+/* Numbered circle for non-active agenda items */
+.agenda-num-pill {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.2);
+  background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; font-weight: 700;
+  color: rgba(247,245,240,0.28);
+  cursor: pointer;
+  letter-spacing: 0;
+  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.18s;
+  flex-shrink: 0;
+}
+.agenda-num-pill:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201,168,76,0.08);
+  transform: scale(1.15);
+}
+.agenda-num-pill.done {
+  color: rgba(94,201,136,0.7);
+  border-color: rgba(94,201,136,0.3);
+  background: rgba(94,201,136,0.06);
 }
 
-/* iOS dots */
+/* Dot group — replaces current agenda's circle with page dots */
+.dot-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.dot-group-label {
+  font-size: 0.48rem; font-weight: 700;
+  color: var(--gold); letter-spacing: 0.1em;
+  line-height: 1;
+}
+.dot-group-dots {
+  display: flex; gap: 6px; align-items: center;
+}
+
+/* iOS page dots */
 .dot {
-  width: 8px; height: 8px;
+  width: 7px; height: 7px;
   border-radius: 50%;
-  background: rgba(201,168,76,0.25);
+  background: rgba(201,168,76,0.22);
   cursor: pointer;
-  transition: background 0.25s, transform 0.25s;
+  transition: background 0.22s, transform 0.22s;
   flex-shrink: 0;
 }
 .dot:hover { background: rgba(201,168,76,0.5); }
 .dot.active {
   background: var(--gold);
-  transform: scale(1.5);
-  box-shadow: 0 0 7px rgba(201,168,76,0.55);
+  transform: scale(1.55);
+  box-shadow: 0 0 6px rgba(201,168,76,0.55);
 }
-.dot.done { background: rgba(94,201,136,0.55); }
-
-/* Agenda icon pills */
-.agenda-icon-pill {
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  border: 1px solid rgba(201,168,76,0.15);
-  background: transparent;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.78rem;
-  color: rgba(247,245,240,0.25);
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.2s;
-  flex-shrink: 0;
-}
-.agenda-icon-pill:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-  background: rgba(201,168,76,0.1);
-  transform: scale(1.15);
-}
-.agenda-icon-pill.done {
-  color: rgba(94,201,136,0.6);
-  border-color: rgba(94,201,136,0.25);
-  background: rgba(94,201,136,0.05);
-}
+.dot.done { background: rgba(94,201,136,0.5); }
 
 #slide-counter { display: none; }
 .image-split {
@@ -1014,7 +1020,7 @@ function buildDividerSlide(sectionIdx, section) {
   const s = el('div', 'slide section-divider');
   const num = String(sectionIdx + 1).padStart(2, '0');
   s.innerHTML = `
-    <div class="divider-section-label">Section ${num}</div>
+    <div class="divider-section-label">Agenda ${num}</div>
     <h1>${formatDividerTitle(section.label)}</h1>
     <p class="divider-sub">${getDividerSub(section.label)}</p>
     <div class="big-num">${num}</div>
@@ -1340,50 +1346,56 @@ function updateDots() {
 
   const sIdx = slideMap[current]?.sectionIndex;
 
-  if (sIdx < 0) {
-    // Title or agenda slide — show all agenda icons
-    AGENDA.forEach((section, i) => {
-      const pill = el('div', 'agenda-icon-pill');
-      pill.textContent = section.icon;
-      pill.title = section.label;
-      if (visitedSections.has(i)) pill.classList.add('done');
-      pill.onclick = () => goToSlide(sectionStartSlide(i));
-      row.appendChild(pill);
-    });
-    return;
-  }
-
-  // Inside a section — build: icon | icon | dots | icon | icon
+  // Build strip: numbered circle for each agenda item
+  // For the CURRENT agenda, expand into internal page dots instead
   AGENDA.forEach((section, i) => {
     const isCurrent = (i === sIdx);
     const isDone    = visitedSections.has(i) && !isCurrent;
 
     if (isCurrent) {
-      // Expand this agenda into its internal page dots
+      // Expand current agenda into its internal page dots
       const sectionSlideIndices = slideMap
         .map((m, idx) => ({ m, idx }))
         .filter(({ m }) => m.sectionIndex === i)
         .map(({ idx }) => idx);
 
       const group = el('div', 'dot-group');
+      // Small agenda number label above dots so context isn't lost
+      const label = el('span', 'dot-group-label', String(i + 1));
+      group.appendChild(label);
+      const dotsWrap = el('div', 'dot-group-dots');
       sectionSlideIndices.forEach(slideIdx => {
         const dot = el('div', 'dot');
         if (slideIdx === current) dot.classList.add('active');
         else if (slideIdx < current) dot.classList.add('done');
         dot.onclick = () => goToSlide(slideIdx);
-        group.appendChild(dot);
+        dotsWrap.appendChild(dot);
       });
+      group.appendChild(dotsWrap);
       row.appendChild(group);
     } else {
-      // Greyed icon pill for every other agenda item
-      const pill = el('div', 'agenda-icon-pill');
-      pill.textContent = section.icon;
-      pill.title = section.label;
-      if (isDone) pill.classList.add('done');
-      pill.onclick = () => goToSlide(sectionStartSlide(i));
-      row.appendChild(pill);
+      // Numbered circle for every other agenda item
+      const num = el('div', 'agenda-num-pill');
+      num.textContent = String(i + 1);
+      num.title = section.label;
+      if (isDone) num.classList.add('done');
+      num.onclick = () => goToSlide(sectionStartSlide(i));
+      row.appendChild(num);
     }
   });
+
+  // On title/agenda slide (sIdx < 0) — show all as numbered circles
+  if (sIdx < 0) {
+    row.innerHTML = '';
+    AGENDA.forEach((section, i) => {
+      const num = el('div', 'agenda-num-pill');
+      num.textContent = String(i + 1);
+      num.title = section.label;
+      if (visitedSections.has(i)) num.classList.add('done');
+      num.onclick = () => goToSlide(sectionStartSlide(i));
+      row.appendChild(num);
+    });
+  }
 }
 
 // ── NAVIGATION ───────────────────────────────────────────────
