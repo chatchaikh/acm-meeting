@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direct Report Meeting</title>
+<script>
+// ════════════════════════════════════════════════════════════
+//  ✏️  EDIT THIS SECTION EACH WEEK
+//  All meeting content lives here — the deck auto-updates.
+// ════════════════════════════════════════════════════════════
+
+const MEETING_CONFIG = {
+  title:    "Direct Report Meeting",
+  subtitle: "Weekly alignment on progress, priorities & decisions.",
+  by:       "AIS Academy",
+  duration: "45 minutes",
+  // Leave as "" to auto-use today's date, or set e.g. "June 12, 2026"
+  date:     "",
+};
+
+/**
+ * AGENDA ITEMS
+ * Each item maps to a section in the deck.
+ * Fields:
+ *   label    — short name shown on agenda index
+ *   duration — time allocation shown on agenda
+ *   icon     — symbol shown on agenda card
+ *   slides   — array of slide objects for this section
+ *
+ * SLIDE TYPES:
+ *   "bullets"  — numbered bullet list
+ *   "twocol"   — two side-by-side cards
+ *   "closing"  — action items + next meeting card
+ */
+const AGENDA = [
+  // ─────────────────────────────────────────────
+  // SECTION 1
+  // ─────────────────────────────────────────────
+  {
+    label:    "Wins & Updates",
+    duration: "10 min",
+    icon:     "✦",
+    slides: [
+      {
+        type:  "twocol",
+        title: "Last Week's Highlights",
+        left: {
+          heading: "Completed",
+          items: [
+            "Shipped feature X to staging environment",
+            "Completed Q1 performance reviews for all direct reports",
+            "Resolved 12 outstanding support tickets",
+            "Onboarded two new team members to the platform",
+          ]
+        },
+        right: {
+          heading: "Key Metrics",
+          items: [
+            "NPS score: 72 (+4 from prior week)",
+            "Active users: 4,210 — up 8% week-on-week",
+            "Platform uptime: 99.97%",
+            "Support CSAT: 91% — above target",
+          ]
+        }
+      }
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // SECTION 2
+  // ─────────────────────────────────────────────
+  {
+    label:    "Priorities",
+    duration: "10 min",
+    icon:     "◈",
+    slides: [
+      {
+        type:  "bullets",
+        title: "Focus Areas This Week",
+        items: [
+          "Launch beta version of the new dashboard to select customers by Thursday",
+          "Finalize Q2 roadmap and distribute to stakeholders before end of week",
+          "Resolve authentication bug affecting enterprise accounts — classified P1",
+          "Conduct three user interviews for the onboarding flow redesign initiative",
+          "Review and approve updated hiring plan submitted by the People team",
+        ]
+      }
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // SECTION 3
+  // ─────────────────────────────────────────────
+  {
+    label:    "Blockers & Risks",
+    duration: "10 min",
+    icon:     "⬡",
+    slides: [
+      {
+        type:  "twocol",
+        title: "Needs Attention",
+        left: {
+          heading: "Active Blockers",
+          items: [
+            "Legal review for partner contract — ETA unknown, escalation needed",
+            "Infrastructure access request pending for new hire (Day 3)",
+            "Mobile app design review stalled — awaiting PM decision",
+          ]
+        },
+        right: {
+          heading: "Risks to Monitor",
+          items: [
+            "Vendor API deprecation in 60 days — migration plan not yet started",
+            "Two senior engineers on leave next sprint — capacity at risk",
+            "Q2 growth target requires 20%; currently tracking at 14%",
+          ]
+        }
+      }
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // SECTION 4
+  // ─────────────────────────────────────────────
+  {
+    label:    "Decisions Needed",
+    duration: "8 min",
+    icon:     "◇",
+    slides: [
+      {
+        type:  "bullets",
+        title: "Align & Decide",
+        items: [
+          "<strong>Budget approval</strong> — Proceed with the $18K infrastructure upgrade before Q2 begins?",
+          "<strong>Hiring priority</strong> — Backfill the designer role or reallocate budget to an engineering hire?",
+          "<strong>Launch date</strong> — Confirm May 12 public launch or push to May 19 for additional QA time?",
+        ]
+      }
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // SECTION 5 — CLOSING (always last)
+  // ─────────────────────────────────────────────
+  {
+    label:    "Action Items",
+    duration: "7 min",
+    icon:     "→",
+    slides: [
+      {
+        type:  "closing",
+        title: "Actions & Next Steps",
+        actions: [
+          "Alex — Draft Q2 roadmap document by Wednesday",
+          "Jordan — Escalate legal review timeline to leadership today",
+          "Morgan — Schedule 3 user interviews before Thursday",
+          "Sam — Patch authentication bug by Tuesday EOD",
+        ],
+        next: {
+          when:     "Same time next week",
+          prereads: "Please review the Q2 roadmap draft before the next session.",
+        }
+      }
+    ]
+  },
+];
+
+// ════════════════════════════════════════════════════════════
+//  END OF EDITABLE SECTION
+// ════════════════════════════════════════════════════════════
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+
+/* ── DESIGN TOKENS ─────────────────────────────── */
+:root {
+  --navy:        #0a1628;
+  --navy-mid:    #112240;
+  --navy-light:  #1a3356;
+  --gold:        #c8a96e;
+  --gold-light:  #dfc08a;
+  --white:       #f5f3ef;
+  --off-white:   #ede9e1;
+  --rule:        rgba(200,169,110,0.35);
+  --text:        #f5f3ef;
+  --text-dim:    rgba(245,243,239,0.55);
+  --text-muted:  rgba(245,243,239,0.35);
+  --card-bg:     rgba(255,255,255,0.04);
+  --card-border: rgba(200,169,110,0.2);
+  --done-color:  #6dbf8a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--navy);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-weight: 300;
+}
+
+/* ── GLOBAL GEOMETRIC TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(200,169,110,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,169,110,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── PROGRESS BAR ── */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  z-index: 200;
+}
+
+/* ── DECK ── */
+#deck {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 52px 80px 36px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.slide.active {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+
+.slide.exit {
+  opacity: 0;
+  transform: translateY(-14px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* ── SLIDE ANATOMY ── */
+.slide-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.eyebrow-rule {
+  height: 1px;
+  width: 32px;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+.eyebrow-text {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.slide h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--white);
+  margin-bottom: 32px;
+  max-width: 680px;
+}
+
+.slide h2 em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+/* ── CONTENT AREA ── */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ── BULLETS ── */
+.bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 760px;
+}
+
+.bullets li {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text);
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(200,169,110,0.1);
+}
+
+.bullets li:first-child { border-top: 1px solid rgba(200,169,110,0.1); }
+
+.bullet-num {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  padding-top: 4px;
+  min-width: 24px;
+  flex-shrink: 0;
+}
+
+/* ── TWO-COLUMN CARDS ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  flex: 1;
+  align-content: center;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  padding: 28px 28px 24px;
+  position: relative;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--gold);
+  opacity: 0.6;
+}
+
+.card-heading {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.card ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+.card ul li {
+  display: flex;
+  gap: 10px;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: rgba(245,243,239,0.82);
+}
+
+.card ul li::before {
+  content: '—';
+  color: var(--gold);
+  opacity: 0.7;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+/* ── CLOSING SLIDE LAYOUT ── */
+.closing-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 24px;
+  flex: 1;
+  align-content: center;
+}
+
+.closing-next {
+  background: rgba(200,169,110,0.07);
+  border: 1px solid var(--rule);
+  padding: 28px;
+  position: relative;
+}
+
+.closing-next::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+.next-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+
+.next-when {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  color: var(--white);
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.next-preread {
+  font-size: 0.83rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  border-top: 1px solid var(--rule);
+  padding-top: 14px;
+  margin-top: 4px;
+}
+
+.preread-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+/* ── TITLE SLIDE ── */
+#slide-title {
+  justify-content: flex-end;
+  padding-bottom: 80px;
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(200,169,110,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 10% 90%, rgba(10,40,80,0.9) 0%, transparent 60%),
+    var(--navy);
+}
+
+.title-firm {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-firm::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--gold);
+}
+
+.title-main {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--white);
+  margin-bottom: 8px;
+  max-width: 700px;
+}
+
+.title-main em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+.title-rule {
+  width: 64px; height: 2px;
+  background: var(--gold);
+  margin: 28px 0 24px;
+}
+
+.title-meta {
+  display: flex;
+  gap: 48px;
+  margin-top: 4px;
+}
+
+.meta-block { display: flex; flex-direction: column; gap: 4px; }
+
+.meta-block .meta-key {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.8;
+}
+
+.meta-block .meta-val {
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: var(--white);
+}
+
+/* Decorative diagonal lines on title */
+#slide-title::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 45%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      -55deg,
+      transparent,
+      transparent 60px,
+      rgba(200,169,110,0.025) 60px,
+      rgba(200,169,110,0.025) 61px
+    );
+  pointer-events: none;
+}
+
+/* ── AGENDA SLIDE ── */
+#slide-agenda {
+  background:
+    radial-gradient(ellipse at 95% 5%, rgba(200,169,110,0.05) 0%, transparent 40%),
+    var(--navy);
+}
+
+.agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+  flex: 1;
+  align-content: center;
+}
+
+.agenda-card {
+  border: 1px solid var(--card-border);
+  padding: 20px 22px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.18s;
+  position: relative;
+  background: var(--card-bg);
+}
+
+.agenda-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 2px; width: 0;
+  background: var(--gold);
+  transition: width 0.25s ease;
+}
+
+.agenda-card:hover::after { width: 100%; }
+.agenda-card:hover { border-color: rgba(200,169,110,0.5); transform: translateY(-2px); }
+
+.agenda-card.status-done {
+  border-color: rgba(109,191,138,0.3);
+  background: rgba(109,191,138,0.04);
+}
+
+.agenda-card.status-done::after { width: 100%; background: var(--done-color); }
+
+.agenda-card.status-active {
+  border-color: var(--gold);
+  background: rgba(200,169,110,0.07);
+}
+
+.agenda-card.status-active::after { width: 100%; background: var(--gold); }
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.card-index {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+}
+
+.status-active .card-index { color: var(--gold); }
+.status-done .card-index { color: var(--done-color); }
+
+.card-status-icon {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.status-done .card-status-icon { color: var(--done-color); }
+.status-active .card-status-icon { color: var(--gold); }
+
+.agenda-icon {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  display: block;
+  color: var(--gold);
+  opacity: 0.7;
+}
+
+.agenda-card-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--white);
+  display: block;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.agenda-card-dur {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+
+/* ── SECTION DIVIDER ── */
+.section-divider {
+  justify-content: center;
+  background:
+    linear-gradient(135deg, var(--navy-mid) 0%, var(--navy) 60%);
+}
+
+.section-divider .big-num {
+  position: absolute;
+  right: 72px;
+  bottom: 60px;
+  font-family: 'Playfair Display', serif;
+  font-size: 9rem;
+  font-weight: 700;
+  color: rgba(200,169,110,0.06);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.divider-section-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.divider-section-label::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: var(--gold);
+}
+
+.section-divider h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.6rem, 5.5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.08;
+  max-width: 600px;
+  color: var(--white);
+}
+
+.section-divider h1 em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+.divider-sub {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  margin-top: 18px;
+  max-width: 440px;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* Diagonal accent on dividers */
+.section-divider::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--gold) 0%, transparent 100%);
+}
+
+/* ── AGENDA RETURN BUTTON ── */
+.btn-return {
+  position: absolute;
+  top: 22px; right: 80px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--text-dim);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.btn-return:hover { color: var(--gold); border-color: var(--gold); }
+
+/* ── NAVIGATION FOOTER ── */
+#nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 80px;
+  height: 60px;
+  border-top: 1px solid rgba(200,169,110,0.15);
+  background: rgba(10,22,40,0.95);
+  flex-shrink: 0;
+  z-index: 2;
+  position: relative;
+}
+
+.nav-left, .nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 18px;
+  border: 1px solid rgba(200,169,110,0.25);
+  background: transparent;
+  color: var(--text-dim);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.nav-btn:hover:not(:disabled) {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(200,169,110,0.05);
+}
+
+.nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+
+.nav-btn.primary {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.nav-btn.primary:hover:not(:disabled) {
+  background: var(--gold-light);
+  border-color: var(--gold-light);
+  color: var(--navy);
+}
+
+.nav-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+}
+
+.dot-row {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.dot {
+  width: 5px; height: 5px;
+  background: rgba(200,169,110,0.2);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s, width 0.2s;
+}
+
+.dot.active { background: var(--gold); width: 14px; }
+.dot.done   { background: rgba(109,191,138,0.6); }
+
+#slide-counter {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+.nav-section-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  margin-right: 8px;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── FIRM WATERMARK ── */
+.firm-mark {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+/* ── KEYBOARD HINT ── */
+.key-hint {
+  position: fixed;
+  bottom: 72px;
+  right: 20px;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  opacity: 0;
+  animation: fadeHint 4s ease 1.5s forwards;
+  pointer-events: none;
+  z-index: 50;
+}
+
+@keyframes fadeHint {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div class="key-hint">← → Arrow keys to navigate · A for agenda</div>
+
+<div id="deck">
+  <!-- Slides are injected here by JavaScript -->
+</div>
+
+<nav id="nav">
+  <div class="nav-left">
+    <button class="nav-btn" id="btn-prev" onclick="changeSlide(-1)">← PREV</button>
+    <button class="nav-btn" id="btn-agenda" onclick="goToAgenda()">AGENDA</button>
+  </div>
+
+  <div class="nav-center">
+    <div class="dot-row" id="dot-row"></div>
+    <div id="slide-counter"></div>
+  </div>
+
+  <div class="nav-right">
+    <span class="nav-section-label" id="current-label"></span>
+    <button class="nav-btn primary" id="btn-next" onclick="changeSlide(1)">NEXT →</button>
+  </div>
+</nav>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  DECK ENGINE — reads MEETING_CONFIG and AGENDA from agenda-data.js
+// ══════════════════════════════════════════════════════════
+
+const deck = document.getElementById('deck');
+let slides = [];
+let current = 0;
+let slideMap = []; // { sectionIndex, type }
+
+// Track which sections have been visited (for persistent done status)
+const visitedSections = new Set();
+
+// ── Date helper ──
+function formatDate(d) {
+  return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+// ── SLIDE BUILDERS ──────────────────────────────────────────
+
+function el(tag, cls, inner) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (inner !== undefined) e.innerHTML = inner;
+  return e;
+}
+
+function eyebrow(text) {
+  const d = el('div', 'slide-eyebrow');
+  d.appendChild(el('div', 'eyebrow-rule'));
+  d.appendChild(el('span', 'eyebrow-text', text));
+  return d;
+}
+
+function buildTitleSlide() {
+  const s = el('div', 'slide');
+  s.id = 'slide-title';
+
+  const dateStr = MEETING_CONFIG.date || formatDate(new Date());
+
+  s.innerHTML = `
+    <div class="title-firm">AIS Academy — Direct Report Meeting</div>
+    <div class="title-main">${MEETING_CONFIG.title.replace(' Meeting', '<br><em>Meeting</em>')}</div>
+    <p style="color:var(--text-dim);font-size:0.9rem;max-width:500px;line-height:1.6;font-weight:300;">${MEETING_CONFIG.subtitle}</p>
+    <div class="title-rule"></div>
+    <div class="title-meta">
+      <div class="meta-block">
+        <span class="meta-key">Date</span>
+        <span class="meta-val">${dateStr}</span>
+      </div>
+      <div class="meta-block">
+        <span class="meta-key">By</span>
+        <span class="meta-val">${MEETING_CONFIG.by}</span>
+      </div>
+      <div class="meta-block">
+        <span class="meta-key">Duration</span>
+        <span class="meta-val">${MEETING_CONFIG.duration}</span>
+      </div>
+    </div>
+  `;
+  return s;
+}
+
+function buildAgendaSlide() {
+  const s = el('div', 'slide');
+  s.id = 'slide-agenda';
+
+  const topRow = el('div');
+  topRow.appendChild(eyebrow('Today\'s Agenda'));
+
+  const h = el('h2');
+  h.innerHTML = 'What We\'ll <em>Cover</em>';
+  topRow.appendChild(h);
+  s.appendChild(topRow);
+
+  const grid = el('div', 'agenda-grid');
+  grid.id = 'agenda-grid';
+  s.appendChild(grid);
+  return s;
+}
+
+function buildDividerSlide(sectionIdx, section) {
+  const s = el('div', 'slide section-divider');
+  const num = String(sectionIdx + 1).padStart(2, '0');
+  s.innerHTML = `
+    <div class="divider-section-label">Section ${num}</div>
+    <h1>${formatDividerTitle(section.label)}</h1>
+    <p class="divider-sub">${getDividerSub(section.label)}</p>
+    <div class="big-num">${num}</div>
+  `;
+  return s;
+}
+
+function formatDividerTitle(label) {
+  const words = label.split(' ');
+  if (words.length <= 2) return `${words[0]}<br><em>${words.slice(1).join(' ') || ''}</em>`;
+  const mid = Math.ceil(words.length / 2);
+  return `${words.slice(0, mid).join(' ')}<br><em>${words.slice(mid).join(' ')}</em>`;
+}
+
+function getDividerSub(label) {
+  const map = {
+    "Wins & Updates":   "What got done since last week.",
+    "Priorities":       "What we're focused on right now.",
+    "Blockers & Risks": "Where we need help or alignment.",
+    "Decisions Needed": "Items requiring a call from this group.",
+    "Action Items":     "Ownership, accountability, and next steps.",
+  };
+  return map[label] || "Reviewing this section now.";
+}
+
+function buildReturnBtn() {
+  const b = el('button', 'btn-return');
+  b.innerHTML = '↩ AGENDA';
+  b.onclick = goToAgenda;
+  return b;
+}
+
+function buildBulletsSlide(sectionLabel, slide) {
+  const s = el('div', 'slide');
+  s.appendChild(buildReturnBtn());
+  s.appendChild(eyebrow(sectionLabel));
+  const h = el('h2');
+  h.textContent = slide.title;
+  s.appendChild(h);
+  const content = el('div', 'content');
+  const ul = el('ul', 'bullets');
+  slide.items.forEach((item, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="bullet-num">0${i+1}</span><span>${item}</span>`;
+    ul.appendChild(li);
+  });
+  content.appendChild(ul);
+  s.appendChild(content);
+  return s;
+}
+
+function buildTwoColSlide(sectionLabel, slide) {
+  const s = el('div', 'slide');
+  s.appendChild(buildReturnBtn());
+  s.appendChild(eyebrow(sectionLabel));
+  const h = el('h2');
+  h.textContent = slide.title;
+  s.appendChild(h);
+  const content = el('div', 'content');
+  const grid = el('div', 'two-col');
+
+  [slide.left, slide.right].forEach(col => {
+    const card = el('div', 'card');
+    const heading = el('div', 'card-heading', col.heading);
+    card.appendChild(heading);
+    const ul = el('ul');
+    col.items.forEach(item => {
+      const li = el('li');
+      li.innerHTML = item;
+      ul.appendChild(li);
+    });
+    card.appendChild(ul);
+    grid.appendChild(card);
+  });
+
+  content.appendChild(grid);
+  s.appendChild(content);
+  return s;
+}
+
+function buildClosingSlide(sectionLabel, slide) {
+  const s = el('div', 'slide');
+  s.appendChild(buildReturnBtn());
+  s.appendChild(eyebrow(sectionLabel));
+  const h = el('h2');
+  h.textContent = slide.title;
+  s.appendChild(h);
+
+  const content = el('div', 'content');
+  const grid = el('div', 'closing-grid');
+
+  // Left: action items card
+  const leftCard = el('div', 'card');
+  const lHeading = el('div', 'card-heading', 'Action Items');
+  leftCard.appendChild(lHeading);
+  const ul = el('ul');
+  slide.actions.forEach(a => {
+    const li = el('li');
+    li.innerHTML = a;
+    ul.appendChild(li);
+  });
+  leftCard.appendChild(ul);
+  grid.appendChild(leftCard);
+
+  // Right: next meeting card
+  const rightCard = el('div', 'closing-next');
+  rightCard.innerHTML = `
+    <div class="next-label">Next Meeting</div>
+    <div class="next-when">${slide.next.when}</div>
+    <div class="next-preread">
+      <div class="preread-label">Pre-read</div>
+      ${slide.next.prereads}
+    </div>
+  `;
+  grid.appendChild(rightCard);
+
+  content.appendChild(grid);
+  s.appendChild(content);
+  return s;
+}
+
+// ── ASSEMBLE ALL SLIDES ──────────────────────────────────────
+
+function buildDeck() {
+  slides = [];
+  slideMap = [];
+
+  // Title slide
+  const titleSlide = buildTitleSlide();
+  deck.appendChild(titleSlide);
+  slides.push(titleSlide);
+  slideMap.push({ sectionIndex: -1, type: 'title' });
+
+  // Agenda slide
+  const agendaSlide = buildAgendaSlide();
+  deck.appendChild(agendaSlide);
+  slides.push(agendaSlide);
+  slideMap.push({ sectionIndex: -1, type: 'agenda' });
+
+  // Section slides
+  AGENDA.forEach((section, sIdx) => {
+    // Divider
+    const divider = buildDividerSlide(sIdx, section);
+    deck.appendChild(divider);
+    slides.push(divider);
+    slideMap.push({ sectionIndex: sIdx, type: 'divider' });
+
+    // Content slides
+    section.slides.forEach(slide => {
+      let s;
+      if (slide.type === 'bullets')  s = buildBulletsSlide(section.label, slide);
+      if (slide.type === 'twocol')   s = buildTwoColSlide(section.label, slide);
+      if (slide.type === 'closing')  s = buildClosingSlide(section.label, slide);
+      if (s) {
+        deck.appendChild(s);
+        slides.push(s);
+        slideMap.push({ sectionIndex: sIdx, type: 'content' });
+      }
+    });
+  });
+
+  buildDots();
+  buildAgendaGrid();
+}
+
+// ── AGENDA GRID ──────────────────────────────────────────────
+
+// Map sectionIndex → first slide index of that section
+function sectionStartSlide(sIdx) {
+  return slideMap.findIndex(m => m.sectionIndex === sIdx);
+}
+
+function buildAgendaGrid() {
+  const grid = document.getElementById('agenda-grid');
+  grid.innerHTML = '';
+  AGENDA.forEach((section, i) => {
+    const card = el('div', 'agenda-card');
+    card.id = `agenda-card-${i}`;
+    card.innerHTML = `
+      <div class="card-top">
+        <span class="card-index">0${i+1}</span>
+        <span class="card-status-icon">○</span>
+      </div>
+      <span class="agenda-icon">${section.icon}</span>
+      <span class="agenda-card-label">${section.label}</span>
+      <span class="agenda-card-dur">${section.duration}</span>
+    `;
+    const slideIdx = sectionStartSlide(i);
+    card.onclick = () => goToSlide(slideIdx);
+    grid.appendChild(card);
+  });
+}
+
+function updateAgendaCards() {
+  const currentSection = slideMap[current]?.sectionIndex;
+
+  AGENDA.forEach((_, i) => {
+    const card = document.getElementById(`agenda-card-${i}`);
+    if (!card) return;
+    const icon = card.querySelector('.card-status-icon');
+    card.className = 'agenda-card';
+
+    // Mark visited sections as done
+    if (visitedSections.has(i) && i !== currentSection) {
+      card.classList.add('status-done');
+      icon.textContent = '✓';
+    } else if (i === currentSection) {
+      card.classList.add('status-active');
+      icon.textContent = '▶';
+    } else {
+      icon.textContent = '○';
+    }
+  });
+}
+
+// ── DOTS ──────────────────────────────────────────────────────
+
+function buildDots() {
+  const row = document.getElementById('dot-row');
+  row.innerHTML = '';
+  slides.forEach((_, i) => {
+    const dot = el('div', 'dot');
+    dot.onclick = () => goToSlide(i);
+    row.appendChild(dot);
+  });
+}
+
+// ── NAVIGATION ───────────────────────────────────────────────
+
+function goToSlide(index) {
+  if (index < 0 || index >= slides.length || index === current) return;
+
+  // Track visited sections when leaving
+  const leavingSection = slideMap[current]?.sectionIndex;
+  if (leavingSection >= 0) visitedSections.add(leavingSection);
+
+  // Animate out
+  slides[current].classList.add('exit');
+  slides[current].classList.remove('active');
+  const leaving = current;
+
+  current = index;
+  slides[current].classList.add('active');
+
+  setTimeout(() => slides[leaving].classList.remove('exit'), 350);
+
+  updateUI();
+}
+
+function changeSlide(dir) { goToSlide(current + dir); }
+function goToAgenda() { goToSlide(1); }
+
+function updateUI() {
+  const total = slides.length;
+  const pct = total <= 1 ? 100 : Math.round((current / (total - 1)) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+
+  const dots = document.getElementById('dot-row').children;
+  Array.from(dots).forEach((d, i) => {
+    d.className = 'dot' + (i === current ? ' active' : i < current ? ' done' : '');
+  });
+
+  document.getElementById('slide-counter').textContent =
+    `${String(current + 1).padStart(2,'0')} / ${String(total).padStart(2,'0')}`;
+
+  // Current section label
+  const sIdx = slideMap[current]?.sectionIndex;
+  const label = sIdx >= 0 ? AGENDA[sIdx].label : (current === 0 ? 'Welcome' : 'Agenda');
+  document.getElementById('current-label').textContent = label.toUpperCase();
+
+  document.getElementById('btn-prev').disabled = current === 0;
+  document.getElementById('btn-next').disabled = current === slides.length - 1;
+  document.getElementById('btn-agenda').style.display = current === 1 ? 'none' : '';
+
+  // Agenda return btn visibility (hide on title & agenda)
+  updateAgendaCards();
+}
+
+// ── KEYBOARD ─────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault(); changeSlide(1);
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault(); changeSlide(-1);
+  } else if (e.key === 'a' || e.key === 'A') {
+    goToAgenda();
+  }
+});
+
+// ── INIT ─────────────────────────────────────────────────────
+buildDeck();
+slides[0].classList.add('active');
+updateUI();
+</script>
+</body>
+</html>
