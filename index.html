@@ -38,7 +38,7 @@ const AGENDA = [
   // SECTION 1
   // ─────────────────────────────────────────────
   {
-    label:    "Wins & Updates",
+    label:    "TMA Sponsorship",
     duration: "3 min",
     icon:     "✦",
     slides: [
@@ -71,7 +71,7 @@ const AGENDA = [
   // SECTION 2
   // ─────────────────────────────────────────────
   {
-    label:    "Priorities",
+    label:    "การเยี่ยมดูงานของคณะแพทย์ มศว.",
     duration: "10 min",
     icon:     "◈",
     slides: [
@@ -93,7 +93,7 @@ const AGENDA = [
   // SECTION 3
   // ─────────────────────────────────────────────
   {
-    label:    "Blockers & Risks",
+    label:    "BIAP & PITB Assessment Results",
     duration: "10 min",
     icon:     "⬡",
     slides: [
@@ -730,7 +730,7 @@ function buildTitleSlide() {
   const dateStr = MEETING_CONFIG.date || formatDate(new Date());
 
   s.innerHTML = `
-    <div class="title-firm">AIS Academy — Direct Report Meeting</div>
+    <div class="title-firm">AIS Academy</div>
     <div class="title-main">${MEETING_CONFIG.title.replace(' Meeting', '<br>Meeting')}</div>
     <p class="title-subtitle">${MEETING_CONFIG.subtitle}</p>
     <div class="title-rule"></div>
