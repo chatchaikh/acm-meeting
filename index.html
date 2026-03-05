@@ -41,6 +41,7 @@ const AGENDA = [
     label:    "Wins & Updates",
     duration: "10 min",
     icon:     "✦",
+    description: "Highlights, metrics & team accomplishments",
     slides: [
       {
         type:  "twocol",
@@ -100,6 +101,7 @@ const AGENDA = [
     label:    "Priorities",
     duration: "10 min",
     icon:     "◈",
+    description: "Focus areas and key objectives this week",
     slides: [
       {
         type:  "bullets",
@@ -122,6 +124,7 @@ const AGENDA = [
     label:    "Blockers & Risks",
     duration: "10 min",
     icon:     "⬡",
+    description: "Issues needing escalation or team support",
     slides: [
       {
         type:  "twocol",
@@ -153,6 +156,7 @@ const AGENDA = [
     label:    "Decisions Needed",
     duration: "8 min",
     icon:     "◇",
+    description: "Alignment required before moving forward",
     slides: [
       {
         type:  "bullets",
@@ -180,6 +184,7 @@ const AGENDA = [
     label:    "Action Items",
     duration: "7 min",
     icon:     "→",
+    description: "Owners, deadlines & next meeting prep",
     slides: [
       {
         type:  "closing",
@@ -492,8 +497,8 @@ body::before {
 
 .agenda-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.4vh 1.4vw;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.2vh 1.6vw;
   flex: 1; align-content: center;
 }
 
@@ -524,39 +529,94 @@ body::before {
 .agenda-card.status-active {
   border-color: var(--gold);
   background: rgba(201,168,76,0.08);
+  box-shadow: 0 0 0 1px rgba(201,168,76,0.2), 0 6px 28px rgba(201,168,76,0.12);
 }
 .agenda-card.status-active::after { width: 100%; background: var(--gold); }
 
-.card-top {
+/* Glowing connector line below active card pointing to nav */
+.agenda-card.status-active::before {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 50%; transform: translateX(-50%);
+  width: 2px; height: 8px;
+  background: linear-gradient(180deg, var(--gold), transparent);
+  pointer-events: none;
+}
+
+.agenda-card-num-row {
   display: flex; justify-content: space-between; align-items: flex-start;
-  margin-bottom: 1.2vh;
+  margin-bottom: 1.4vh;
 }
-.card-index {
-  font-size: 0.58rem; font-weight: 700;
-  letter-spacing: 0.2em; color: var(--text-muted);
+/* Big agenda number — prominent, left aligned */
+.agenda-card-num {
+  font-size: clamp(2.2rem, 3.8vw, 3.5rem);
+  font-weight: 700; line-height: 1;
+  color: rgba(201,168,76,0.2);
+  letter-spacing: -0.05em;
+  transition: color 0.25s;
 }
-.status-active .card-index { color: var(--gold); }
-.status-done   .card-index { color: var(--done-color); }
+.status-active .agenda-card-num { color: var(--gold); opacity: 1; }
+.status-done   .agenda-card-num { color: rgba(94,201,136,0.5); }
 
-.card-status-icon { font-size: 0.85rem; color: var(--text-muted); }
-.status-done  .card-status-icon { color: var(--done-color); }
-.status-active .card-status-icon { color: var(--gold); }
-
-.agenda-icon {
-  font-size: 1.6rem; margin-bottom: 1vh;
-  display: block; color: var(--gold); opacity: 0.75;
+/* Status badge — top right */
+.card-status-badge {
+  font-size: 0.55rem; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; padding: 3px 9px;
+  border-radius: 20px; border: 1px solid transparent;
+  color: var(--text-muted);
+}
+.status-active .card-status-badge {
+  color: var(--gold);
+  border-color: rgba(201,168,76,0.35);
+  background: rgba(201,168,76,0.08);
+}
+.status-done .card-status-badge {
+  color: var(--done-color);
+  border-color: rgba(94,201,136,0.3);
+  background: rgba(94,201,136,0.06);
 }
 
 .agenda-card-label {
-  font-size: clamp(1.15rem, 1.6vw, 1.5rem);
+  font-size: clamp(1rem, 1.35vw, 1.25rem);
   font-weight: 700; color: var(--white);
-  display: block; margin-bottom: 0.4vh; line-height: 1.3;
+  display: block; margin-bottom: 0.6vh; line-height: 1.3;
+}
+
+/* Subtitle / description line */
+.agenda-card-sub {
+  font-size: clamp(0.72rem, 0.9vw, 0.85rem);
+  color: var(--text-dim); line-height: 1.5;
+  display: block; margin-bottom: 1.4vh;
+  font-weight: 400;
+}
+
+.agenda-card-footer {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 8px;
+  border-top: 1px solid rgba(201,168,76,0.1);
+  padding-top: 1vh; margin-top: auto;
 }
 
 .agenda-card-dur {
-  font-size: clamp(0.78rem, 0.9vw, 0.88rem);
-  color: var(--text-dim); letter-spacing: 0.04em;
+  font-size: clamp(0.65rem, 0.8vw, 0.78rem);
+  color: var(--text-muted); letter-spacing: 0.06em;
+  text-transform: uppercase; font-weight: 600;
+  flex-shrink: 0;
 }
+
+/* Mini dot strip on agenda cards */
+.agenda-card-dots {
+  display: flex; gap: 4px; align-items: center; flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.agenda-mini-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(201,168,76,0.15);
+  transition: background 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+.agenda-mini-dot.active { background: var(--gold); transform: scale(1.4); }
+.agenda-mini-dot.done   { background: rgba(94,201,136,0.5); }
 
 /* ── SECTION DIVIDER ── */
 .section-divider {
@@ -625,56 +685,44 @@ body::before {
   flex-shrink: 0; z-index: 2; position: relative;
 }
 
-/* Agenda progress pill */
-.agenda-progress {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 4px 12px;
-  border: 1px solid var(--rule);
-  border-radius: 20px;
-  background: rgba(201,168,76,0.06);
-}
-.agenda-progress-label {
-  font-size: 0.58rem; font-weight: 700;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--text-muted);
-}
-.agenda-progress-val {
-  font-size: 0.72rem; font-weight: 700;
-  color: var(--gold); letter-spacing: 0.06em;
-}
-
-/* Next slide title */
+/* Next slide title / current agenda label */
 .nav-next-title {
-  font-size: 0.62rem; color: var(--text-muted);
+  font-size: 0.65rem; color: var(--text-dim);
   letter-spacing: 0.05em;
-  max-width: 160px; white-space: nowrap;
+  max-width: 200px; white-space: nowrap;
   overflow: hidden; text-overflow: ellipsis;
-  text-align: right;
+  text-align: right; font-weight: 600;
+}
+.nav-page-pos {
+  font-size: 0.6rem; color: var(--text-muted);
+  font-weight: 400; margin-left: 4px;
 }
 
 .nav-left { display: flex; align-items: center; gap: 10px; }
 .nav-right { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
 
 .nav-btn {
-  display: flex; align-items: center; gap: 7px;
-  padding: 8px 20px;
+  display: flex; align-items: center; justify-content: center;
   border: 1px solid rgba(201,168,76,0.28); background: transparent;
   border-radius: 22px;
   color: var(--text-dim);
   font-family: 'Arial Rounded MT Bold', 'Arial Rounded', sans-serif;
-  font-size: 0.7rem; font-weight: 600;
-  letter-spacing: 0.1em; cursor: pointer;
+  cursor: pointer;
   transition: color 0.15s, border-color 0.15s, background 0.15s;
-  white-space: nowrap;
+}
+.nav-btn.icon-btn {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  font-size: 1.1rem; padding: 0;
 }
 .nav-btn:hover:not(:disabled) {
   color: var(--gold); border-color: var(--gold);
-  background: rgba(201,168,76,0.05);
+  background: rgba(201,168,76,0.07);
 }
 .nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
 .nav-btn.primary {
   background: var(--gold); border-color: var(--gold);
-  color: var(--navy); font-weight: 700;
+  color: var(--navy);
 }
 .nav-btn.primary:hover:not(:disabled) {
   background: var(--gold-light); border-color: var(--gold-light); color: var(--navy);
@@ -690,10 +738,12 @@ body::before {
   justify-content: center;
 }
 
-/* Numbered circle for non-active agenda items */
+/* Numbered capsule — width set dynamically by JS via --pill-w */
 .agenda-num-pill {
-  width: 28px; height: 28px;
-  border-radius: 50%;
+  height: 28px;
+  min-width: 28px;
+  width: var(--pill-w, 28px);
+  border-radius: 14px;
   border: 1px solid rgba(201,168,76,0.2);
   background: transparent;
   display: flex; align-items: center; justify-content: center;
@@ -701,14 +751,14 @@ body::before {
   color: rgba(247,245,240,0.28);
   cursor: pointer;
   letter-spacing: 0;
-  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.18s;
+  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.18s, width 0.3s;
   flex-shrink: 0;
 }
 .agenda-num-pill:hover {
   border-color: var(--gold);
   color: var(--gold);
   background: rgba(201,168,76,0.08);
-  transform: scale(1.15);
+  transform: scale(1.08);
 }
 .agenda-num-pill.done {
   color: rgba(94,201,136,0.7);
@@ -716,20 +766,19 @@ body::before {
   background: rgba(94,201,136,0.06);
 }
 
-/* Dot group — replaces current agenda's circle with page dots */
+/* Dot group capsule — current section's pages */
 .dot-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-}
-.dot-group-label {
-  font-size: 0.48rem; font-weight: 700;
-  color: var(--gold); letter-spacing: 0.1em;
-  line-height: 1;
+  gap: 2px;
 }
 .dot-group-dots {
   display: flex; gap: 6px; align-items: center;
+  background: rgba(201,168,76,0.07);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 12px;
+  padding: 5px 10px;
 }
 
 /* iOS page dots */
@@ -879,6 +928,39 @@ body::before {
 .stat-delta.down { background: rgba(255,90,90,0.12);  color: #f87171; }
 .stat-delta.flat { background: rgba(201,168,76,0.12); color: var(--gold); }
 
+/* Connector line from active agenda card down toward nav strip */
+.card-connector {
+  position: absolute;
+  bottom: -1px; left: 50%;
+  transform: translateX(-50%);
+  width: 2px; height: 0;
+  background: linear-gradient(180deg, var(--gold) 0%, rgba(201,168,76,0.2) 100%);
+  border-radius: 1px;
+  transition: height 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s;
+  opacity: 0;
+  pointer-events: none;
+}
+.card-connector.visible {
+  height: 18px;
+  opacity: 1;
+}
+/* Pulse dot at the tip of the connector */
+.card-connector.visible::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 50%;
+  transform: translateX(-50%);
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(201,168,76,0.7);
+  animation: connectorPulse 1.8s ease infinite;
+}
+@keyframes connectorPulse {
+  0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  50%       { opacity: 0.5; transform: translateX(-50%) scale(1.5); }
+}
+
 /* ── KEYBOARD HINT ── */
 .key-hint {
   position: fixed; bottom: 72px; right: 20px;
@@ -916,12 +998,8 @@ body::before {
 
 <nav id="nav">
   <div class="nav-left">
-    <button class="nav-btn" id="btn-prev" onclick="changeSlide(-1)">← PREV</button>
-    <button class="nav-btn" id="btn-agenda" onclick="goToAgenda()">AGENDA</button>
-    <div class="agenda-progress" id="agenda-progress" style="display:none">
-      <span class="agenda-progress-label">Agenda</span>
-      <span class="agenda-progress-val" id="agenda-progress-val">—</span>
-    </div>
+    <button class="nav-btn icon-btn" id="btn-prev" onclick="changeSlide(-1)" title="Previous">&#8592;</button>
+    <button class="nav-btn icon-btn" id="btn-agenda" onclick="goToAgenda()" title="Agenda">⌂</button>
   </div>
 
   <div class="nav-center">
@@ -931,7 +1009,7 @@ body::before {
 
   <div class="nav-right">
     <span class="nav-next-title" id="nav-next-title"></span>
-    <button class="nav-btn primary" id="btn-next" onclick="changeSlide(1)">NEXT →</button>
+    <button class="nav-btn icon-btn primary" id="btn-next" onclick="changeSlide(1)" title="Next">&#8594;</button>
   </div>
 </nav>
 
@@ -1006,7 +1084,7 @@ function buildAgendaSlide() {
   topRow.appendChild(eyebrow('Today\'s Agenda'));
 
   const h = el('h2');
-  h.textContent = "What We'll Cover";
+  h.textContent = "Today's Agenda";
   topRow.appendChild(h);
   s.appendChild(topRow);
 
@@ -1294,15 +1372,28 @@ function buildAgendaGrid() {
   AGENDA.forEach((section, i) => {
     const card = el('div', 'agenda-card');
     card.id = `agenda-card-${i}`;
+    const sectionSlideCount = slideMap.filter(m => m.sectionIndex === i).length;
+    const miniDots = Array.from({length: sectionSlideCount}, () =>
+      `<span class="agenda-mini-dot"></span>`
+    ).join('');
+    // subtitle falls back to duration if no description provided
+    const sub = section.description || '';
     card.innerHTML = `
-      <div class="card-top">
-        <span class="card-index">0${i+1}</span>
-        <span class="card-status-icon">○</span>
+      <div class="agenda-card-num-row">
+        <span class="agenda-card-num">${String(i+1).padStart(2,'0')}</span>
+        <span class="card-status-badge">upcoming</span>
       </div>
-      <span class="agenda-icon">${section.icon}</span>
       <span class="agenda-card-label">${section.label}</span>
-      <span class="agenda-card-dur">${section.duration}</span>
+      ${sub ? `<span class="agenda-card-sub">${sub}</span>` : ''}
+      <div class="agenda-card-footer">
+        <span class="agenda-card-dur">⏱ ${section.duration}</span>
+        <div class="agenda-card-dots">${miniDots}</div>
+      </div>
     `;
+    // Connector line element — shown when active
+    const connector = el('div', 'card-connector');
+    connector.id = `connector-${i}`;
+    card.appendChild(connector);
     const slideIdx = sectionStartSlide(i);
     card.onclick = () => goToSlide(slideIdx);
     grid.appendChild(card);
@@ -1315,18 +1406,41 @@ function updateAgendaCards() {
   AGENDA.forEach((_, i) => {
     const card = document.getElementById(`agenda-card-${i}`);
     if (!card) return;
-    const icon = card.querySelector('.card-status-icon');
+    const badge = card.querySelector('.card-status-badge');
     card.className = 'agenda-card';
 
-    // Mark visited sections as done
     if (visitedSections.has(i) && i !== currentSection) {
       card.classList.add('status-done');
-      icon.textContent = '✓';
+      if (badge) badge.textContent = 'done';
     } else if (i === currentSection) {
       card.classList.add('status-active');
-      icon.textContent = '▶';
+      if (badge) badge.textContent = 'now';
     } else {
-      icon.textContent = '○';
+      if (badge) badge.textContent = 'upcoming';
+    }
+
+    // Update mini dots
+    const miniDots = card.querySelectorAll('.agenda-mini-dot');
+    const sectionSlideIndices = slideMap
+      .map((m, idx) => ({ m, idx }))
+      .filter(({ m }) => m.sectionIndex === i)
+      .map(({ idx }) => idx);
+
+    miniDots.forEach((dot, d) => {
+      dot.className = 'agenda-mini-dot';
+      if (i === currentSection) {
+        const posInSection = sectionSlideIndices.indexOf(current);
+        if (d < posInSection) dot.classList.add('done');
+        else if (d === posInSection) dot.classList.add('active');
+      } else if (visitedSections.has(i)) {
+        dot.classList.add('done');
+      }
+    });
+
+    // Connector line — animate from active card toward nav when on agenda slide
+    const connector = document.getElementById(`connector-${i}`);
+    if (connector) {
+      connector.className = 'card-connector' + (i === currentSection ? ' visible' : '');
     }
   });
 }
@@ -1346,56 +1460,37 @@ function updateDots() {
 
   const sIdx = slideMap[current]?.sectionIndex;
 
-  // Build strip: numbered circle for each agenda item
-  // For the CURRENT agenda, expand into internal page dots instead
   AGENDA.forEach((section, i) => {
     const isCurrent = (i === sIdx);
     const isDone    = visitedSections.has(i) && !isCurrent;
 
-    if (isCurrent) {
-      // Expand current agenda into its internal page dots
-      const sectionSlideIndices = slideMap
-        .map((m, idx) => ({ m, idx }))
-        .filter(({ m }) => m.sectionIndex === i)
-        .map(({ idx }) => idx);
+    const sectionSlideIndices = slideMap
+      .map((m, idx) => ({ m, idx }))
+      .filter(({ m }) => m.sectionIndex === i)
+      .map(({ idx }) => idx);
+    const sc = sectionSlideIndices.length;
 
-      const group = el('div', 'dot-group');
-      // Small agenda number label above dots so context isn't lost
-      const label = el('span', 'dot-group-label', String(i + 1));
-      group.appendChild(label);
-      const dotsWrap = el('div', 'dot-group-dots');
+    if (isCurrent) {
+      // Current section: bare dots, no wrapper
       sectionSlideIndices.forEach(slideIdx => {
         const dot = el('div', 'dot');
         if (slideIdx === current) dot.classList.add('active');
         else if (slideIdx < current) dot.classList.add('done');
         dot.onclick = () => goToSlide(slideIdx);
-        dotsWrap.appendChild(dot);
+        row.appendChild(dot);
       });
-      group.appendChild(dotsWrap);
-      row.appendChild(group);
     } else {
-      // Numbered circle for every other agenda item
-      const num = el('div', 'agenda-num-pill');
-      num.textContent = String(i + 1);
-      num.title = section.label;
-      if (isDone) num.classList.add('done');
-      num.onclick = () => goToSlide(sectionStartSlide(i));
-      row.appendChild(num);
+      // Other sections: numbered circle, width proportional to slide count
+      const pill = el('div', 'agenda-num-pill');
+      pill.textContent = String(i + 1);
+      pill.title = section.label;
+      if (isDone) pill.classList.add('done');
+      pill.onclick = () => goToSlide(sectionStartSlide(i));
+      const pw = Math.min(28 + (sc - 1) * 8, 62);
+      pill.style.setProperty('--pill-w', pw + 'px');
+      row.appendChild(pill);
     }
   });
-
-  // On title/agenda slide (sIdx < 0) — show all as numbered circles
-  if (sIdx < 0) {
-    row.innerHTML = '';
-    AGENDA.forEach((section, i) => {
-      const num = el('div', 'agenda-num-pill');
-      num.textContent = String(i + 1);
-      num.title = section.label;
-      if (visitedSections.has(i)) num.classList.add('done');
-      num.onclick = () => goToSlide(sectionStartSlide(i));
-      row.appendChild(num);
-    });
-  }
 }
 
 // ── NAVIGATION ───────────────────────────────────────────────
@@ -1428,38 +1523,15 @@ function updateUI() {
 
   updateDots();
 
-  // Agenda progress pill — show only when inside a section
-  const sIdx = slideMap[current]?.sectionIndex;
-  const progressEl = document.getElementById('agenda-progress');
-  const progressVal = document.getElementById('agenda-progress-val');
-  if (sIdx >= 0) {
-    progressEl.style.display = 'inline-flex';
-    progressVal.textContent = `${sIdx + 1} / ${AGENDA.length}`;
-  } else {
-    progressEl.style.display = 'none';
-  }
-
-  // Next slide title preview
+  // Current agenda number + name (bottom right)
   const nextTitleEl = document.getElementById('nav-next-title');
-  if (current < slides.length - 1) {
-    const nextMap = slideMap[current + 1];
-    let nextLabel = '';
-    if (nextMap.type === 'divider') nextLabel = AGENDA[nextMap.sectionIndex]?.label || '';
-    else if (nextMap.type === 'agenda') nextLabel = 'Agenda';
-    else if (nextMap.type === 'title') nextLabel = '';
-    else {
-      const sec = AGENDA[nextMap.sectionIndex];
-      // Find content slide index within section
-      let contentCount = 0;
-      for (let i = 0; i <= current + 1; i++) {
-        if (i === current + 1) break;
-        if (slideMap[i]?.sectionIndex === nextMap.sectionIndex && slideMap[i]?.type === 'content') contentCount++;
-      }
-      nextLabel = sec?.slides[contentCount]?.title || sec?.label || '';
-    }
-    nextTitleEl.textContent = nextLabel ? `Next: ${nextLabel}` : '';
-  } else {
+  const curSIdx = slideMap[current]?.sectionIndex;
+  if (curSIdx >= 0) {
+    nextTitleEl.textContent = `${curSIdx + 1}: ${AGENDA[curSIdx].label}`;
+  } else if (current === 0) {
     nextTitleEl.textContent = '';
+  } else {
+    nextTitleEl.textContent = 'Agenda Overview';
   }
 
   document.getElementById('btn-prev').disabled = current === 0;
