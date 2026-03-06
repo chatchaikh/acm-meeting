@@ -709,12 +709,12 @@ body::before {
   /* base is bright — untouched items should stand out */
 }
 .agenda-card.status-done {
-  border-color: rgba(94,201,136,0.18);
-  background: rgba(94,201,136,0.025);
-  opacity: 0.55;
+  border-color: rgba(150,150,160,0.2);
+  background: rgba(150,150,160,0.03);
+  opacity: 0.45;
 }
-.agenda-card.status-done::after  { width: 100%; background: var(--done-color); }
-.agenda-card.status-done:hover   { opacity: 0.85; }
+.agenda-card.status-done::after  { width: 100%; background: rgba(140,140,150,0.4); }
+.agenda-card.status-done:hover   { opacity: 0.75; }
 .agenda-card.status-active {
   border-color: var(--gold);
   background: rgba(201,168,76,0.08);
@@ -741,31 +741,31 @@ body::before {
   font-size: clamp(2.2rem, 3.8vw, 3.5rem);
   font-weight: 700; line-height: 1;
   color: var(--gold);
-  opacity: 0.55;
+  opacity: 0.85;
   letter-spacing: -0.05em;
   transition: color 0.25s, opacity 0.25s;
 }
 .status-active .agenda-card-num { color: var(--gold); opacity: 1; }
-.status-done   .agenda-card-num { color: rgba(94,201,136,0.7); opacity: 1; }
+.status-done   .agenda-card-num { color: rgba(150,150,160,0.5); opacity: 1; }
 
 /* Progress arc (SVG donut) — top right of agenda card */
 .progress-arc-wrap {
   flex-shrink: 0;
-  width: 36px; height: 36px;
+  width: 28px; height: 28px;
 }
 .progress-arc-wrap svg { display: block; }
 .arc-track {
-  fill: none; stroke: rgba(201,168,76,0.22); stroke-width: 3;
+  fill: none; stroke: rgba(201,168,76,0.18); stroke-width: 5;
 }
 .arc-fill {
-  fill: none; stroke: var(--gold); stroke-width: 3;
+  fill: none; stroke: var(--gold); stroke-width: 5;
   stroke-linecap: round;
   transition: stroke-dashoffset 0.5s cubic-bezier(.4,0,.2,1), stroke 0.3s;
 }
-.arc-fill.arc-done { stroke: var(--done-color); }
-.arc-pct {
-  font-size: 6px; font-weight: 700;
-  fill: var(--text-dim); text-anchor: middle;
+.arc-fill.arc-done { stroke: rgba(140,140,150,0.5); }
+.arc-tick {
+  font-size: 7px; font-weight: 700;
+  fill: rgba(140,140,150,0.7); text-anchor: middle;
   dominant-baseline: middle;
 }
 
@@ -1941,16 +1941,17 @@ function sectionStartSlide(sIdx) {
 }
 
 function makeArcSVG(pct, done) {
-  const r = 14, cx = 18, cy = 18;
+  const r = 10, cx = 14, cy = 14;
   const circ = 2 * Math.PI * r;
   const offset = circ * (1 - pct / 100);
-  return `<svg width="36" height="36" viewBox="0 0 36 36">
+  return `<svg width="28" height="28" viewBox="0 0 28 28">
     <circle class="arc-track" cx="${cx}" cy="${cy}" r="${r}"/>
     <circle class="arc-fill${done ? ' arc-done' : ''}"
       cx="${cx}" cy="${cy}" r="${r}"
       stroke-dasharray="${circ}"
       stroke-dashoffset="${offset}"
       transform="rotate(-90 ${cx} ${cy})"/>
+    ${done ? `<text class="arc-tick" x="${cx}" y="${cy}">✓</text>` : ''}
   </svg>`;
 }
 
