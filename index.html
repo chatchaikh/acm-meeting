@@ -950,6 +950,11 @@ body::before {
   border-color: rgba(150,150,160,0.25);
   background: rgba(150,150,160,0.06);
 }
+.agenda-num-pill.active-a {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.1);
+}
 
 /* Dot group capsule — current section's pages */
 .dot-group {
@@ -1551,7 +1556,6 @@ body::before {
 <nav id="nav">
   <div class="nav-left">
     <button class="nav-btn icon-btn" id="btn-prev" onclick="changeSlide(-1)" title="Previous">&#8592;</button>
-    <button class="btn-reset" id="btn-agenda" onclick="goToAgenda()" title="Agenda">A</button>
     <button class="btn-reset" id="btn-reset" onclick="resetDeck()" title="Reset progress">R</button>
   </div>
 
@@ -2190,10 +2194,14 @@ function updateAgendaCards() {
     }
     // active/in-progress = same appearance as not-started (bright, no special class)
 
-    // Arc: partial fill for in-progress, full+tick for done, empty for not-started
+    // Arc: hide when unvisited (pct===0), partial when in-progress, tick when done
     const arcWrap = document.getElementById(`arc-${i}`);
     if (arcWrap) {
-      arcWrap.innerHTML = makeArcSVG(isDone ? 100 : pct, isDone);
+      if (pct === 0 && !isDone) {
+        arcWrap.innerHTML = ''; // unvisited — show nothing
+      } else {
+        arcWrap.innerHTML = makeArcSVG(isDone ? 100 : pct, isDone);
+      }
     }
 
     // Connector line
@@ -2211,6 +2219,15 @@ function buildDots() {
   updateDots();
 }
 
+function makeAgendaBtn(id) {
+  const btn = el('div', 'agenda-num-pill agenda-a-btn');
+  btn.textContent = 'A';
+  btn.id = id;
+  btn.title = 'Agenda Overview';
+  btn.onclick = () => goToSlide(1);
+  return btn;
+}
+
 function updateDots() {
   const row = document.getElementById('dot-row');
   const counter = document.getElementById('slide-counter');
@@ -2218,6 +2235,12 @@ function updateDots() {
   row.innerHTML = '';
 
   const sIdx = slideMap[current]?.sectionIndex;
+  const type = slideMap[current]?.type;
+
+  // Leading A — jumps to agenda overview
+  const aLeft = makeAgendaBtn('dot-a-left');
+  if (type === 'agenda') aLeft.classList.add('active-a');
+  row.appendChild(aLeft);
 
   AGENDA.forEach((section, i) => {
     const isCurrent = (i === sIdx);
@@ -2230,16 +2253,13 @@ function updateDots() {
     const sc = sectionSlideIndices.length;
 
     if (isCurrent) {
-      // Current section: bare dots — only active highlighted, no in-progress done state
       sectionSlideIndices.forEach(slideIdx => {
         const dot = el('div', 'dot');
         if (slideIdx === current) dot.classList.add('active');
-        // no .done within current section — in-progress looks same as not-started
         dot.onclick = () => goToSlide(slideIdx);
         row.appendChild(dot);
       });
     } else {
-      // Other sections: numbered circle, width proportional to slide count
       const pill = el('div', 'agenda-num-pill');
       pill.textContent = String(i + 1);
       pill.title = section.label;
@@ -2250,6 +2270,13 @@ function updateDots() {
       row.appendChild(pill);
     }
   });
+
+  // Trailing A — jumps to ending slide (last slide)
+  const aRight = makeAgendaBtn('dot-a-right');
+  aRight.onclick = () => goToSlide(slides.length - 1);
+  aRight.title = 'Ending';
+  if (type === 'end') aRight.classList.add('active-a');
+  row.appendChild(aRight);
 }
 
 // ── NAVIGATION ───────────────────────────────────────────────
@@ -2304,7 +2331,6 @@ function updateUI() {
 
   document.getElementById('btn-prev').disabled = current === 0;
   document.getElementById('btn-next').disabled = current === slides.length - 1;
-  document.getElementById('btn-agenda').style.display = current === 1 ? 'none' : '';
 
   updateAgendaCards();
   updateEndingSlide();
