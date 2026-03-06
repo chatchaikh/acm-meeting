@@ -411,18 +411,46 @@ body {
   font-weight: 400;
 }
 
-/* ── ORG WATERMARK — top right every slide ── */
+/* ── ORG MARK — animated flip ticker, top right every slide ── */
 .org-mark {
   position: absolute;
   top: 2vh; right: 2vw;
   font-size: 0.55rem;
   font-weight: 700;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(160,180,210,0.45);
   pointer-events: none;
   z-index: 10;
   white-space: nowrap;
+  display: flex;
+  perspective: 400px;
+}
+.org-mark-char {
+  display: inline-block;
+  color: rgba(160,180,210,0.45);
+  animation: orgCharFlip 9s ease-in-out infinite;
+  transform-origin: center center;
+}
+@keyframes orgCharFlip {
+  0%, 60%, 100% {
+    transform: rotateX(0deg);
+    color: rgba(160,180,210,0.45);
+  }
+  72% {
+    transform: rotateX(-90deg);
+    color: rgba(160,180,210,0);
+  }
+  75% {
+    transform: rotateX(90deg);
+    color: rgba(201,168,76,0);
+  }
+  88% {
+    transform: rotateX(0deg);
+    color: rgba(201,168,76,0.6);
+  }
+  96% {
+    color: rgba(201,168,76,0.6);
+  }
 }
 
 /* ── GRID TEXTURE ── */
@@ -828,19 +856,7 @@ body::before {
 }
 
 /* ── RETURN BUTTON ── */
-.btn-return {
-  position: absolute; top: 2.2vh; right: 5vw;
-  display: flex; align-items: center; gap: 8px;
-  padding: 7px 16px;
-  border: 1px solid var(--rule); background: transparent;
-  border-radius: 20px;
-  color: var(--text-dim);
-  font-family: 'Arial Rounded MT Bold', 'Arial Rounded', sans-serif;
-  font-size: 0.68rem; font-weight: 600;
-  letter-spacing: 0.1em; cursor: pointer;
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
-}
-.btn-return:hover { color: var(--gold); border-color: var(--gold); background: rgba(201,168,76,0.06); }
+
 
 /* ── NAV FOOTER ── */
 #nav {
@@ -1444,6 +1460,59 @@ body::before {
   flex-shrink: 0;
 }
 
+/* ── ENDING SLIDE ── */
+#slide-end {
+  justify-content: center; align-items: center;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(201,168,76,0.07) 0%, transparent 60%),
+    var(--navy);
+}
+.end-inner {
+  display: flex; flex-direction: column; align-items: center; gap: 2.5vh;
+  animation: fadeUp 0.7s ease both;
+}
+.end-rule {
+  width: 48px; height: 2px; background: var(--gold); margin: 0 auto;
+}
+.end-title {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 700; color: var(--white);
+  letter-spacing: -0.03em; line-height: 1.1;
+}
+.end-sub {
+  font-size: clamp(0.9rem, 1.3vw, 1.15rem);
+  color: var(--text-dim); max-width: 42vw;
+  line-height: 1.7; font-weight: 400;
+}
+.end-org {
+  font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(160,180,210,0.5); margin-top: 1vh;
+}
+.end-agenda-grid {
+  display: flex; gap: 1.2vw; margin-top: 1.5vh;
+  flex-wrap: wrap; justify-content: center;
+}
+.end-agenda-pill {
+  font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 4px 14px; border-radius: 20px;
+  border: 1px solid rgba(201,168,76,0.2);
+  color: rgba(247,245,240,0.3);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.end-agenda-pill:hover {
+  color: var(--gold); border-color: var(--gold);
+  background: rgba(201,168,76,0.06);
+}
+.end-agenda-pill.done {
+  color: rgba(150,150,160,0.45);
+  border-color: rgba(150,150,160,0.2);
+  text-decoration: line-through;
+}
+
 /* ── KEYBOARD HINT ── */
 .key-hint {
   position: fixed; bottom: 72px; right: 20px;
@@ -1526,7 +1595,14 @@ function el(tag, cls, inner) {
 }
 
 function orgMark() {
-  return el('div', 'org-mark', MEETING_CONFIG.org || 'AIS Academy');
+  const wrap = el('div', 'org-mark');
+  const text = (MEETING_CONFIG.org || 'AIS Academy').toUpperCase();
+  text.split('').forEach((ch, i) => {
+    const span = el('span', 'org-mark-char', ch === ' ' ? '&nbsp;' : ch);
+    span.style.animationDelay = `${i * 0.06}s`;
+    wrap.appendChild(span);
+  });
+  return wrap;
 }
 
 function eyebrow(text) {
@@ -1627,7 +1703,6 @@ function buildReturnBtn() {
 function buildBulletsSlide(sectionLabel, slide) {
   const s = el('div', 'slide');
   s.appendChild(orgMark());
-  s.appendChild(buildReturnBtn());
   s.appendChild(eyebrow(sectionLabel));
   const h = el('h2');
   h.textContent = slide.title;
@@ -1647,7 +1722,6 @@ function buildBulletsSlide(sectionLabel, slide) {
 function buildTwoColSlide(sectionLabel, slide) {
   const s = el('div', 'slide');
   s.appendChild(orgMark());
-  s.appendChild(buildReturnBtn());
   s.appendChild(eyebrow(sectionLabel));
   const h = el('h2');
   h.textContent = slide.title;
@@ -1677,7 +1751,6 @@ function buildTwoColSlide(sectionLabel, slide) {
 function buildClosingSlide(sectionLabel, slide) {
   const s = el('div', 'slide');
   s.appendChild(orgMark());
-  s.appendChild(buildReturnBtn());
   s.appendChild(eyebrow(sectionLabel));
   const h = el('h2');
   h.textContent = slide.title;
@@ -1720,7 +1793,6 @@ function buildImageSlide(sectionLabel, slide) {
   const s = el('div', 'slide');
   s.appendChild(orgMark());
   s.style.padding = '4vh 5vw 0';
-  s.appendChild(buildReturnBtn());
   s.appendChild(eyebrow(sectionLabel));
   const h = el('h2');
   h.textContent = slide.title;
@@ -1771,7 +1843,6 @@ function buildImageSlide(sectionLabel, slide) {
 function buildQuoteSlide(sectionLabel, slide) {
   const s = el('div', 'slide quote-slide');
   s.appendChild(orgMark());
-  s.appendChild(buildReturnBtn());
   s.appendChild(eyebrow(sectionLabel));
   s.innerHTML += `
     <div class="quote-mark">"</div>
@@ -1782,14 +1853,12 @@ function buildQuoteSlide(sectionLabel, slide) {
     </div>
   `;
   // Re-attach return btn (innerHTML overwrites it)
-  s.insertBefore(buildReturnBtn(), s.firstChild);
   return s;
 }
 
 function buildStatSlide(sectionLabel, slide) {
   const s = el('div', 'slide');
   s.appendChild(orgMark());
-  s.appendChild(buildReturnBtn());
   s.appendChild(eyebrow(sectionLabel));
   const h = el('h2'); h.textContent = slide.title; s.appendChild(h);
   const content = el('div', 'content');
@@ -1813,7 +1882,6 @@ function buildStatSlide(sectionLabel, slide) {
 function buildTimelineSlide(sectionLabel, slide) {
   const s = el('div', 'slide');
   s.appendChild(orgMark());
-  s.appendChild(buildReturnBtn());
   s.appendChild(eyebrow(sectionLabel));
   const h = el('h2'); h.textContent = slide.title; s.appendChild(h);
   const content = el('div', 'content');
@@ -1838,7 +1906,6 @@ function buildTimelineSlide(sectionLabel, slide) {
 function buildChecklistSlide(sectionLabel, slide) {
   const s = el('div', 'slide');
   s.appendChild(orgMark());
-  s.appendChild(buildReturnBtn());
   s.appendChild(eyebrow(sectionLabel));
   const h = el('h2'); h.textContent = slide.title; s.appendChild(h);
   const content = el('div', 'content');
@@ -1867,7 +1934,6 @@ function buildFullbleedSlide(sectionLabel, slide) {
   bg.style.backgroundImage = `url('${slide.image}')`;
   s.appendChild(bg);
   s.appendChild(el('div', 'fullbleed-overlay'));
-  s.appendChild(buildReturnBtn());
   const fc = el('div', 'fullbleed-content');
   fc.appendChild(eyebrow(sectionLabel));
   const h = el('h2'); h.textContent = slide.title; fc.appendChild(h);
@@ -1883,7 +1949,6 @@ function buildFullbleedSlide(sectionLabel, slide) {
 function buildHorizontalTimelineSlide(sectionLabel, slide) {
   const s = el('div', 'slide');
   s.appendChild(orgMark());
-  s.appendChild(buildReturnBtn());
   s.appendChild(eyebrow(sectionLabel));
   const h = el('h2'); h.textContent = slide.title; s.appendChild(h);
 
@@ -1955,6 +2020,43 @@ function buildHorizontalTimelineSlide(sectionLabel, slide) {
 }
 
 
+function buildEndingSlide() {
+  const s = el('div', 'slide');
+  s.id = 'slide-end';
+  s.appendChild(orgMark());
+
+  const inner = el('div', 'end-inner');
+  inner.innerHTML = `
+    <div class="end-rule"></div>
+    <div class="end-title">That's a Wrap.</div>
+    <p class="end-sub">${MEETING_CONFIG.subtitle}</p>
+    <div class="end-org">${MEETING_CONFIG.org || 'AIS Academy'} &nbsp;·&nbsp; ${MEETING_CONFIG.date || formatDate(new Date())}</div>
+  `;
+
+  // Agenda revisit pills
+  const pillRow = el('div', 'end-agenda-grid');
+  AGENDA.forEach((section, i) => {
+    const pill = el('div', 'end-agenda-pill');
+    pill.textContent = `${String(i+1).padStart(2,'0')} ${section.label}`;
+    pill.id = `end-pill-${i}`;
+    pill.onclick = () => goToSlide(sectionStartSlide(i));
+    pillRow.appendChild(pill);
+  });
+  inner.appendChild(pillRow);
+  s.appendChild(inner);
+  return s;
+}
+
+function updateEndingSlide() {
+  AGENDA.forEach((_, i) => {
+    const pill = document.getElementById(`end-pill-${i}`);
+    if (pill) {
+      pill.className = 'end-agenda-pill' + (visitedSections.has(i) ? ' done' : '');
+    }
+  });
+}
+
+
 function buildDeck() {
   slides = [];
   slideMap = [];
@@ -2003,6 +2105,12 @@ function buildDeck() {
 
   buildDots();
   buildAgendaGrid();
+
+  // Ending slide
+  const endSlide = buildEndingSlide();
+  deck.appendChild(endSlide);
+  slides.push(endSlide);
+  slideMap.push({ sectionIndex: -1, type: 'end' });
 }
 
 // ── AGENDA GRID ──────────────────────────────────────────────
@@ -2199,6 +2307,7 @@ function updateUI() {
   document.getElementById('btn-agenda').style.display = current === 1 ? 'none' : '';
 
   updateAgendaCards();
+  updateEndingSlide();
 }
 
 // ── RESET ────────────────────────────────────────────────────
