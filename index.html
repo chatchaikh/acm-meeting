@@ -1344,8 +1344,14 @@ body::before {
 }
 
 @keyframes htlBlink {
-  0%, 100% { box-shadow: 0 0 0 4px rgba(201,168,76,0.2), 0 0 20px rgba(201,168,76,0.35); }
-  50%       { box-shadow: 0 0 0 7px rgba(201,168,76,0.08), 0 0 32px rgba(201,168,76,0.6); }
+  0%, 100% {
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.35), 0 0 12px rgba(201,168,76,0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgba(201,168,76,0.08), 0 0 36px rgba(201,168,76,0.75);
+    transform: scale(1.12);
+  }
 }
 
 /* Hover — lift and brighten any dot */
@@ -1365,45 +1371,50 @@ body::before {
 }
 .htl-event { transition: opacity 0.2s; }
 
-/* Tooltip card floating above hovered event */
-.htl-tooltip {
+/* Tooltip — fixed overlay, positioned via JS to avoid clip issues */
+.htl-tooltip-overlay {
   position: absolute;
-  bottom: calc(100% + 14px);
-  left: 50%; transform: translateX(-50%);
-  background: var(--navy-mid);
-  border: 1px solid rgba(201,168,76,0.35);
-  border-radius: 10px;
-  padding: 1vh 1.2vw;
-  min-width: 160px; max-width: 220px;
   pointer-events: none;
   opacity: 0;
-  translate: 0 6px;
-  transition: opacity 0.18s ease, translate 0.18s ease;
-  z-index: 20;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
-  white-space: normal;
+  z-index: 100;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  transform: translateY(6px);
 }
-.htl-tooltip::after {
+.htl-tooltip-overlay.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.htl-tooltip-box {
+  background: var(--navy-mid);
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: 10px;
+  padding: 1.2vh 1.4vw;
+  min-width: 170px; max-width: 240px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  white-space: normal;
+  position: relative;
+}
+.htl-tooltip-box::after {
   content: '';
   position: absolute;
   top: 100%; left: 50%; transform: translateX(-50%);
-  border: 6px solid transparent;
-  border-top-color: rgba(201,168,76,0.35);
+  border: 7px solid transparent;
+  border-top-color: rgba(201,168,76,0.4);
 }
 .htl-tooltip-date {
   font-size: 0.55rem; font-weight: 700;
   letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 0.4vh;
+  color: var(--gold); margin-bottom: 0.5vh;
 }
 .htl-tooltip-title {
-  font-size: 0.85rem; font-weight: 700;
-  color: var(--white); margin-bottom: 0.3vh; line-height: 1.3;
+  font-size: 0.9rem; font-weight: 700;
+  color: var(--white); margin-bottom: 0.4vh; line-height: 1.3;
 }
 .htl-tooltip-desc {
   font-size: 0.75rem; color: var(--text-dim); line-height: 1.5;
 }
 .htl-tooltip-status {
-  display: inline-block; margin-top: 0.5vh;
+  display: inline-block; margin-top: 0.6vh;
   font-size: 0.55rem; font-weight: 700; letter-spacing: 0.12em;
   text-transform: uppercase; padding: 2px 8px;
   border-radius: 10px;
@@ -1411,11 +1422,6 @@ body::before {
 .htl-tooltip-status.past    { background: rgba(201,168,76,0.12); color: var(--gold); }
 .htl-tooltip-status.current { background: rgba(201,168,76,0.22); color: var(--gold-light); }
 .htl-tooltip-status.future  { background: rgba(150,150,160,0.12); color: rgba(150,150,160,0.7); }
-
-.htl-event:hover .htl-tooltip {
-  opacity: 1;
-  translate: 0 0;
-}
 .htl-event.past .htl-dot {
   background: rgba(201,168,76,0.12);
   border-color: var(--gold);
@@ -1424,7 +1430,7 @@ body::before {
   background: var(--gold);
   border-color: var(--gold);
   color: var(--navy);
-  animation: htlBlink 1.4s ease-in-out infinite;
+  animation: htlBlink 1.1s ease-in-out infinite;
 }
 .htl-event.future .htl-dot {
   border-color: rgba(201,168,76,0.2);
@@ -1959,19 +1965,20 @@ function buildHorizontalTimelineSlide(sectionLabel, slide) {
   const wrap = el('div', 'htl-wrap');
   const trackArea = el('div', 'htl-track-area');
 
-  // Spine
   trackArea.appendChild(el('div', 'htl-spine'));
 
-  // Find current event index
   const currentIdx = slide.items.findIndex(item => item.status === 'current');
-  const totalEvents = slide.items.length;
 
-  // Spine fill — up to and including current event
   const spineFill = el('div', 'htl-spine-fill');
-  // Width calculated after appending, done via inline style via JS after layout
   trackArea.appendChild(spineFill);
 
   const eventsRow = el('div', 'htl-events');
+
+  // Tooltip overlay — lives on the slide, not inside trackArea
+  const tooltipOverlay = el('div', 'htl-tooltip-overlay');
+  const tooltipBox = el('div', 'htl-tooltip-box');
+  tooltipOverlay.appendChild(tooltipBox);
+  s.appendChild(tooltipOverlay);
 
   slide.items.forEach((item, i) => {
     const statusClass = item.status || (i < currentIdx ? 'past' : i === currentIdx ? 'current' : 'future');
@@ -1979,17 +1986,6 @@ function buildHorizontalTimelineSlide(sectionLabel, slide) {
 
     const dot = el('div', 'htl-dot', item.marker || String(i + 1).padStart(2,'0'));
     ev.appendChild(dot);
-
-    // Tooltip
-    const statusLabel = item.status || (i < currentIdx ? 'past' : i === currentIdx ? 'current' : 'future');
-    const tooltip = el('div', 'htl-tooltip');
-    tooltip.innerHTML = `
-      ${item.date ? `<div class="htl-tooltip-date">${item.date}</div>` : ''}
-      <div class="htl-tooltip-title">${item.title}</div>
-      ${item.desc ? `<div class="htl-tooltip-desc">${item.desc}</div>` : ''}
-      <span class="htl-tooltip-status ${statusLabel}">${statusLabel}</span>
-    `;
-    ev.appendChild(tooltip);
 
     const tick = el('div', 'htl-tick');
     ev.appendChild(tick);
@@ -2000,18 +1996,50 @@ function buildHorizontalTimelineSlide(sectionLabel, slide) {
     if (item.desc) label.appendChild(el('div', 'htl-desc', item.desc));
     ev.appendChild(label);
 
+    // Store tooltip data on the event element
+    ev.dataset.tipDate   = item.date   || '';
+    ev.dataset.tipTitle  = item.title  || '';
+    ev.dataset.tipDesc   = item.desc   || '';
+    ev.dataset.tipStatus = statusClass;
+
+    // Show tooltip on mouseenter
+    ev.addEventListener('mouseenter', () => {
+      tooltipBox.innerHTML = `
+        ${ev.dataset.tipDate ? `<div class="htl-tooltip-date">${ev.dataset.tipDate}</div>` : ''}
+        <div class="htl-tooltip-title">${ev.dataset.tipTitle}</div>
+        ${ev.dataset.tipDesc ? `<div class="htl-tooltip-desc">${ev.dataset.tipDesc}</div>` : ''}
+        <span class="htl-tooltip-status ${ev.dataset.tipStatus}">${ev.dataset.tipStatus}</span>
+      `;
+      // Position: centred on the dot, above the dot
+      const dotRect  = dot.getBoundingClientRect();
+      const slideRect = s.getBoundingClientRect();
+      const tipW = 200; // approximate width
+      let left = dotRect.left - slideRect.left + dotRect.width / 2 - tipW / 2;
+      // Clamp to slide bounds
+      left = Math.max(8, Math.min(left, slideRect.width - tipW - 8));
+      const top = dotRect.top - slideRect.top - tooltipBox.offsetHeight - 20;
+      tooltipOverlay.style.left = left + 'px';
+      tooltipOverlay.style.top  = top + 'px';
+      tooltipOverlay.style.width = tipW + 'px';
+      tooltipOverlay.classList.add('visible');
+    });
+
+    ev.addEventListener('mouseleave', () => {
+      tooltipOverlay.classList.remove('visible');
+    });
+
     eventsRow.appendChild(ev);
   });
 
   trackArea.appendChild(eventsRow);
 
-  // Animate spine fill to current position after render
+  // Spine fill width after render
   requestAnimationFrame(() => {
     const dots = trackArea.querySelectorAll('.htl-dot');
     if (dots.length > 0 && currentIdx >= 0 && currentIdx < dots.length) {
-      const firstRect  = dots[0].getBoundingClientRect();
-      const curRect    = dots[currentIdx].getBoundingClientRect();
-      const fillWidth  = (curRect.left + curRect.width / 2) - (firstRect.left - firstRect.width / 2);
+      const firstRect = dots[0].getBoundingClientRect();
+      const curRect   = dots[currentIdx].getBoundingClientRect();
+      const fillWidth = (curRect.left + curRect.width / 2) - (firstRect.left - firstRect.width / 2);
       spineFill.style.width = Math.max(0, fillWidth) + 'px';
     } else if (currentIdx < 0) {
       spineFill.style.width = '0px';
