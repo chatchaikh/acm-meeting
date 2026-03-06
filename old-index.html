@@ -1,0 +1,2404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direct Report Meeting</title>
+<script>
+// ════════════════════════════════════════════════════════════
+//  ✏️  EDIT THIS SECTION EACH WEEK
+//  All meeting content lives here — the deck auto-updates.
+// ════════════════════════════════════════════════════════════
+
+const MEETING_CONFIG = {
+  org:      "AIS Academy",          // ✏️ Organisation name — shown top-right on every slide
+  title:    "Direct Report Meeting",
+  subtitle: "Weekly alignment on progress, priorities & decisions.",
+  by:       "AIS Academy",
+  duration: "45 minutes",
+  // Leave as "" to auto-use today's date, or set e.g. "June 12, 2026"
+  date:     "",
+};
+
+/**
+ * AGENDA ITEMS
+ * Each item maps to a section in the deck.
+ * Fields:
+ *   label       — short name shown on agenda index
+ *   duration    — time allocation shown on agenda
+ *   icon        — symbol shown on agenda card
+ *   description — subtitle shown on agenda card (optional)
+ *   slides      — array of slide objects for this section
+ *
+ * SLIDE TYPES:
+ *   "bullets"     — numbered bullet list
+ *   "twocol"      — two side-by-side cards
+ *   "stat"        — large number callout cards
+ *   "image-left"  — photo left, content right
+ *   "image-right" — content left, photo right
+ *   "quote"       — full-slide pull quote
+ *   "closing"     — action items + next meeting card
+ *   "title"       — section title splash (use as first slide in a section)
+ */
+const AGENDA = [
+
+  // ─────────────────────────────────────────────
+  // 1 — WINS & UPDATES
+  // ─────────────────────────────────────────────
+  {
+    label:       "Wins & Updates",
+    duration:    "10 min",
+    icon:        "✦",
+    description: "Highlights, metrics & team accomplishments",
+    slides: [
+
+      // ── TEMPLATE: fullbleed — hero image with overlay text
+      // ✏️ Replace image URL with your own
+      {
+        type:    "fullbleed",
+        title:   "A Strong Week",
+        image:   "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1600&auto=format&fit=crop",
+        caption: "The team shipped two major milestones and exceeded NPS targets for the third week running.",
+      },
+
+      // ── TEMPLATE: stat — large number callouts
+      {
+        type:  "stat",
+        title: "Performance at a Glance",
+        stats: [
+          { value: "4,210",  label: "Active Users",    delta: "↑ 8% WoW",    trend: "up"   },
+          { value: "99.97%", label: "Platform Uptime", delta: "On target",    trend: "flat" },
+          { value: "72",     label: "NPS Score",       delta: "↑ +4 pts",    trend: "up"   },
+          { value: "91%",    label: "Support CSAT",    delta: "Above target", trend: "up"   },
+        ],
+      },
+
+      // ── TEMPLATE: twocol — two side-by-side cards
+      {
+        type:  "twocol",
+        title: "Last Week's Highlights",
+        left: {
+          heading: "Completed",
+          items: [
+            "Shipped feature X to staging environment",
+            "Completed Q1 performance reviews for all reports",
+            "Resolved 12 outstanding support tickets",
+            "Onboarded two new team members successfully",
+          ],
+        },
+        right: {
+          heading: "Recognition",
+          items: [
+            "Jordan — AWS Solutions Architect certified",
+            "Backend team — zero-downtime deployment streak",
+            "Design team — onboarding flow mockups shipped",
+            "Customer success — 3 new case studies published",
+          ],
+        },
+      },
+
+      // ── TEMPLATE: image-right — content left, photo right
+      // ✏️ Replace image URL with your own
+      {
+        type:     "image-right",
+        title:    "Team Spotlight",
+        image:    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&auto=format&fit=crop",
+        imageAlt: "Team collaborating in office",
+        items: [
+          "Backend team hit zero-downtime deployment milestone",
+          "Jordan completed AWS Solutions Architect certification",
+          "Three customer success stories published this week",
+          "Design team shipped revised onboarding flow mockups",
+        ],
+      },
+
+    ],
+  },
+
+  // ─────────────────────────────────────────────
+  // 2 — PRIORITIES
+  // ─────────────────────────────────────────────
+  {
+    label:       "Priorities",
+    duration:    "10 min",
+    icon:        "◈",
+    description: "Focus areas and key objectives this week",
+    slides: [
+
+      // ── TEMPLATE: bullets — numbered list
+      {
+        type:  "bullets",
+        title: "Focus Areas This Week",
+        items: [
+          "Launch beta dashboard to select customers by Thursday",
+          "Finalise Q2 roadmap and distribute to stakeholders before EOW",
+          "Resolve P1 authentication bug affecting enterprise accounts",
+          "Conduct three user interviews for the onboarding redesign",
+          "Review and approve updated hiring plan from People team",
+        ],
+      },
+
+      // ── TEMPLATE: timeline — ordered milestones with dates
+      {
+        type:  "timeline",
+        title: "Q2 Delivery Milestones",
+        items: [
+          { title: "Beta Dashboard Launch",       desc: "Ship to 50 select customers for feedback",   date: "May 8"  },
+          { title: "Auth Bug Resolved",           desc: "P1 fix deployed and verified in production", date: "May 13" },
+          { title: "User Research Complete",      desc: "3 interviews done, synthesis report shared", date: "May 16" },
+          { title: "Q2 Roadmap Distributed",      desc: "Final doc sent to all stakeholders",         date: "May 20" },
+          { title: "Public Launch",               desc: "Full rollout with marketing campaign live",  date: "May 27" },
+        ],
+      },
+
+      // ── TEMPLATE: htimeline — horizontal project timeline
+      {
+        type:  "htimeline",
+        title: "Q2 Project Timeline",
+        items: [
+          { date: "Apr 1",  title: "Q2 Kickoff",          desc: "OKRs locked, teams aligned",          status: "past"    },
+          { date: "Apr 15", title: "Design Sprints",       desc: "UX research & wireframes complete",   status: "past"    },
+          { date: "May 1",  title: "Beta Build",           desc: "Core features in staging",            status: "past"    },
+          { date: "May 13", title: "Internal Testing",     desc: "QA pass across all platforms",        status: "current" },
+          { date: "May 27", title: "Public Launch",        desc: "Marketing + full rollout",            status: "future"  },
+          { date: "Jun 10", title: "Post-Launch Retro",    desc: "Review metrics, plan Q3",             status: "future"  },
+        ],
+      },
+
+      // ── TEMPLATE: image-left — photo left, content right
+      // ✏️ Replace image URL with your own
+      {
+        type:     "image-left",
+        title:    "Q2 Roadmap Themes",
+        image:    "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=900&auto=format&fit=crop",
+        imageAlt: "Roadmap planning on whiteboard",
+        body:     "Three strategic pillars guide Q2 — each maps directly to a company OKR.",
+        items: [
+          "Growth — expand into two new enterprise verticals",
+          "Reliability — achieve 99.99% SLA across all tiers",
+          "Experience — reduce onboarding time-to-value by 40%",
+        ],
+      },
+
+    ],
+  },
+
+  // ─────────────────────────────────────────────
+  // 3 — BLOCKERS & RISKS
+  // ─────────────────────────────────────────────
+  {
+    label:       "Blockers & Risks",
+    duration:    "10 min",
+    icon:        "⬡",
+    description: "Issues needing escalation or team support",
+    slides: [
+
+      // ── TEMPLATE: checklist — status checklist with owners
+      {
+        type:  "checklist",
+        title: "Open Items Status",
+        items: [
+          { text: "Legal review for partner contract",           status: "none",    owner: "Riley"  },
+          { text: "Infrastructure access for new hire",          status: "partial", owner: "Ops"    },
+          { text: "Mobile design review — awaiting PM decision", status: "none",    owner: "Morgan" },
+          { text: "Vendor API migration plan drafted",           status: "partial", owner: "Sam"    },
+          { text: "Q2 capacity plan reviewed",                   status: "checked", owner: "Alex"   },
+          { text: "Senior engineer leave coverage arranged",     status: "none",    owner: "Jordan" },
+        ],
+      },
+
+      // ── TEMPLATE: stat — risk indicators
+      {
+        type:  "stat",
+        title: "Risk Indicators",
+        stats: [
+          { value: "3",   label: "Active P1 Blockers",            delta: "↑ +1 this week", trend: "down" },
+          { value: "60d", label: "Vendor API Deadline",           delta: "No plan yet",     trend: "down" },
+          { value: "14%", label: "Q2 Growth Tracking",            delta: "Target: 20%",     trend: "down" },
+          { value: "2",   label: "Engineers on Leave (next sprint)", delta: "Plan needed",  trend: "flat" },
+        ],
+      },
+
+      // ── TEMPLATE: twocol — blockers vs risks
+      {
+        type:  "twocol",
+        title: "Blockers & Risks Detail",
+        left: {
+          heading: "Active Blockers",
+          items: [
+            "Legal review for partner contract — ETA unknown",
+            "Infrastructure access pending (new hire Day 3)",
+            "Mobile design review stalled — awaiting PM call",
+          ],
+        },
+        right: {
+          heading: "Risks to Monitor",
+          items: [
+            "Vendor API deprecation in 60 days — not started",
+            "Two senior engineers on leave next sprint",
+            "Q2 growth at 14% vs 20% target — gap widening",
+          ],
+        },
+      },
+
+    ],
+  },
+
+  // ─────────────────────────────────────────────
+  // 4 — DECISIONS NEEDED
+  // ─────────────────────────────────────────────
+  {
+    label:       "Decisions Needed",
+    duration:    "8 min",
+    icon:        "◇",
+    description: "Alignment required before moving forward",
+    slides: [
+
+      // ── TEMPLATE: bullets — decisions list
+      {
+        type:  "bullets",
+        title: "Align & Decide Today",
+        items: [
+          "<strong>Budget</strong> — Approve $18K infrastructure upgrade before Q2 spend freeze?",
+          "<strong>Hiring</strong> — Backfill designer role or reallocate headcount to engineering?",
+          "<strong>Launch date</strong> — Confirm May 27 or push to June 3 for extra QA time?",
+          "<strong>Vendor migration</strong> — Dedicate a sprint or run in parallel with roadmap work?",
+        ],
+      },
+
+      // ── TEMPLATE: fullbleed — decision context
+      // ✏️ Replace image URL with your own
+      {
+        type:    "fullbleed",
+        title:   "Why Speed of Decision Matters",
+        image:   "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1600&auto=format&fit=crop",
+        caption: "Every day a decision is delayed costs ~0.3% of sprint velocity. Three open items have been pending for 2+ weeks.",
+      },
+
+      // ── TEMPLATE: htimeline — product release history (decision context)
+      {
+        type:  "htimeline",
+        title: "Product Release History",
+        items: [
+          { date: "Q3 2023", title: "v1.0 Launch",       desc: "Core platform, 200 users",            status: "past"    },
+          { date: "Q4 2023", title: "v1.5 — Mobile",     desc: "iOS & Android apps shipped",          status: "past"    },
+          { date: "Q1 2024", title: "v2.0 — Enterprise", desc: "SSO, audit logs, admin console",      status: "past"    },
+          { date: "Q2 2024", title: "v2.5 — Dashboard",  desc: "Beta launch — current milestone",     status: "current" },
+          { date: "Q3 2024", title: "v3.0 — API",        desc: "Public API + developer ecosystem",    status: "future"  },
+          { date: "Q4 2024", title: "v3.5 — Scale",      desc: "Multi-region, 10k+ users target",     status: "future"  },
+        ],
+      },
+
+      // ── TEMPLATE: quote — leadership principle
+      {
+        type:   "quote",
+        quote:  "Speed of decision is a competitive advantage. Clarity of ownership is what makes speed safe.",
+        author: "AIS Academy",
+        role:   "Leadership Principle",
+      },
+
+      // ── TEMPLATE: image-right — infrastructure case
+      // ✏️ Replace image URL with your own
+      {
+        type:     "image-right",
+        title:    "Infrastructure Upgrade Case",
+        image:    "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=900&auto=format&fit=crop",
+        imageAlt: "Server infrastructure",
+        body:     "The $18K upgrade addresses three critical reliability gaps from the Q1 post-mortem.",
+        items: [
+          "Reduce peak latency from 340ms to under 80ms",
+          "Eliminate single point of failure in payment flow",
+          "Enable horizontal scaling ahead of Q3 growth push",
+        ],
+      },
+
+    ],
+  },
+
+  // ─────────────────────────────────────────────
+  // 5 — ACTION ITEMS
+  // ─────────────────────────────────────────────
+  {
+    label:       "Action Items",
+    duration:    "7 min",
+    icon:        "→",
+    description: "Owners, deadlines & next meeting prep",
+    slides: [
+
+      // ── TEMPLATE: checklist — commitment tracker with owners
+      {
+        type:  "checklist",
+        title: "This Week's Commitments",
+        items: [
+          { text: "Draft Q2 roadmap document",           status: "none",    owner: "Alex · Wed"    },
+          { text: "Escalate legal review to leadership", status: "none",    owner: "Riley · Today" },
+          { text: "Schedule 3 user interviews",          status: "partial", owner: "Morgan · Thu"  },
+          { text: "Patch authentication bug",            status: "none",    owner: "Sam · Tue EOD" },
+          { text: "Complete AWS migration plan",         status: "partial", owner: "Jordan · Fri"  },
+          { text: "Ship beta dashboard",                 status: "none",    owner: "Dev · Thu"     },
+        ],
+      },
+
+      // ── TEMPLATE: timeline — next 30 days
+      {
+        type:  "timeline",
+        title: "Next 30 Days",
+        items: [
+          { title: "Week 1 — Stabilise", desc: "Close P1 bugs, unblock legal, finalise roadmap",  date: "May 6–10"  },
+          { title: "Week 2 — Ship",      desc: "Beta dashboard live, user interviews complete",    date: "May 13–17" },
+          { title: "Week 3 — Align",     desc: "Roadmap approved, infrastructure decision locked", date: "May 20–24" },
+          { title: "Week 4 — Launch",    desc: "Public launch, post-launch monitoring & retro",   date: "May 27–31" },
+        ],
+      },
+
+      // ── TEMPLATE: closing — action items + next meeting
+      {
+        type:  "closing",
+        title: "Actions & Next Steps",
+        actions: [
+          "Alex — Draft Q2 roadmap document by Wednesday",
+          "Riley — Escalate legal review timeline to leadership today",
+          "Morgan — Schedule 3 user interviews before Thursday",
+          "Sam — Patch authentication bug by Tuesday EOD",
+          "Jordan — Complete AWS migration plan by Friday",
+        ],
+        next: {
+          when:     "Same time next week",
+          prereads: "Please review the Q2 roadmap draft before the next session.",
+        },
+      },
+
+    ],
+  },
+
+]
+
+// ════════════════════════════════════════════════════════════
+//  END OF EDITABLE SECTION
+// ════════════════════════════════════════════════════════════
+</script>
+<style>
+/* ── DESIGN TOKENS ─────────────────────────────── */
+:root {
+  --navy:        #0b1a2e;
+  --navy-mid:    #102038;
+  --gold:        #c9a84c;
+  --gold-light:  #e0c068;
+  --gold-dim:    rgba(201,168,76,0.18);
+  --white:       #f7f5f0;
+  --rule:        rgba(201,168,76,0.3);
+  --text:        #f7f5f0;
+  --text-dim:    rgba(247,245,240,0.55);
+  --text-muted:  rgba(247,245,240,0.32);
+  --card-bg:     rgba(255,255,255,0.045);
+  --card-border: rgba(201,168,76,0.22);
+  --done-color:  #5ec988;
+
+  /* Base font size — increase this to scale everything */
+  font-size: 18px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Arial Rounded MT Bold', 'Arial Rounded', 'Nunito', sans-serif;
+  background: var(--navy);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-weight: 400;
+}
+
+/* ── ORG MARK — animated flip ticker, top right every slide ── */
+.org-mark {
+  position: absolute;
+  top: 2vh; right: 2vw;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 10;
+  white-space: nowrap;
+  display: flex;
+  perspective: 400px;
+}
+.org-mark-char {
+  display: inline-block;
+  color: rgba(160,180,210,0.45);
+  animation: orgCharFlip 9s ease-in-out infinite;
+  transform-origin: center center;
+}
+@keyframes orgCharFlip {
+  0%, 60%, 100% {
+    transform: rotateX(0deg);
+    color: rgba(160,180,210,0.45);
+  }
+  72% {
+    transform: rotateX(-90deg);
+    color: rgba(160,180,210,0);
+  }
+  75% {
+    transform: rotateX(90deg);
+    color: rgba(201,168,76,0);
+  }
+  88% {
+    transform: rotateX(0deg);
+    color: rgba(201,168,76,0.6);
+  }
+  96% {
+    color: rgba(201,168,76,0.6);
+  }
+}
+
+/* ── GRID TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.028) 1px, transparent 1px);
+  background-size: 56px 56px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── PROGRESS BAR ── */
+#progress-bar {
+  position: fixed; top: 0; left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  z-index: 200;
+}
+
+/* ── DECK ── */
+#deck {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: 4vh 5vw 2.5vh;
+  opacity: 0; pointer-events: none;
+  transform: translateY(18px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.slide.active  { opacity: 1; pointer-events: all; transform: translateY(0); }
+.slide.exit    { opacity: 0; transform: translateY(-12px); transition: opacity 0.25s ease, transform 0.25s ease; }
+
+/* ── EYEBROW ── */
+.slide-eyebrow {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 1.4vh;
+}
+.eyebrow-rule { height: 2px; width: 36px; background: var(--gold); flex-shrink: 0; }
+.eyebrow-text {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ── SLIDE H2 ── */
+.slide h2 {
+  font-size: clamp(2.6rem, 4.8vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.08;
+  color: var(--white);
+  margin-bottom: 2.5vh;
+  max-width: 80vw;
+  letter-spacing: -0.02em;
+}
+
+/* ── CONTENT ── */
+.content {
+  flex: 1; display: flex; flex-direction: column; justify-content: center;
+}
+
+/* ── BULLETS ── */
+.bullets {
+  list-style: none;
+  display: flex; flex-direction: column;
+  width: 100%; max-width: 900px;
+}
+
+.bullets li {
+  display: flex; align-items: flex-start; gap: 22px;
+  font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+  line-height: 1.55;
+  color: var(--text);
+  padding: 1.4vh 0;
+  border-bottom: 1px solid rgba(201,168,76,0.12);
+}
+.bullets li:first-child { border-top: 1px solid rgba(201,168,76,0.12); }
+
+.bullet-num {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  padding-top: 6px;
+  min-width: 28px;
+  flex-shrink: 0;
+}
+
+/* ── TWO-COLUMN CARDS ── */
+.two-col {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2vw; flex: 1; align-content: center;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 2.6vh 2.2vw;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; width: 3px; height: 100%;
+  background: var(--gold); opacity: 0.7;
+}
+
+.card-heading {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.6vh;
+  padding-bottom: 1.2vh;
+  border-bottom: 1px solid var(--rule);
+}
+
+.card ul { list-style: none; display: flex; flex-direction: column; gap: 1.1vh; }
+
+.card ul li {
+  display: flex; gap: 12px;
+  font-size: clamp(0.95rem, 1.3vw, 1.2rem);
+  line-height: 1.5;
+  color: rgba(247,245,240,0.85);
+}
+
+.card ul li::before {
+  content: '—'; color: var(--gold);
+  opacity: 0.65; flex-shrink: 0; font-weight: 700;
+}
+
+/* ── CLOSING ── */
+.closing-grid {
+  display: grid; grid-template-columns: 3fr 2fr;
+  gap: 2vw; flex: 1; align-content: center;
+}
+
+.closing-next {
+  background: rgba(201,168,76,0.06);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 2.6vh 2.2vw;
+  position: relative;
+  overflow: hidden;
+}
+
+.closing-next::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+.next-label {
+  font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1.2vh;
+}
+
+.next-when {
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  color: var(--white); margin-bottom: 1.4vh; line-height: 1.45;
+  font-weight: 700;
+}
+
+.next-preread {
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  color: var(--text-dim); line-height: 1.6;
+  border-top: 1px solid var(--rule);
+  padding-top: 1.2vh; margin-top: 0.4vh;
+}
+
+.preread-label {
+  font-size: 0.58rem; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 0.5vh;
+}
+
+/* ── TITLE SLIDE ── */
+#slide-title {
+  justify-content: flex-end;
+  padding-bottom: 8vh;
+  background:
+    radial-gradient(ellipse at 78% 18%, rgba(201,168,76,0.07) 0%, transparent 48%),
+    radial-gradient(ellipse at 8% 92%, rgba(10,30,60,0.95) 0%, transparent 55%),
+    var(--navy);
+}
+
+#slide-title::after {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 44%; height: 100%;
+  background: repeating-linear-gradient(
+    -54deg, transparent, transparent 64px,
+    rgba(201,168,76,0.022) 64px, rgba(201,168,76,0.022) 65px
+  );
+  pointer-events: none;
+}
+
+.title-firm {
+  font-size: 0.65rem; font-weight: 700;
+  letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 3vh;
+  display: flex; align-items: center; gap: 14px;
+}
+.title-firm::before { content: ''; width: 28px; height: 2px; background: var(--gold); }
+
+.title-main {
+  font-size: clamp(4rem, 9vw, 8rem);
+  font-weight: 700; line-height: 1.0;
+  color: var(--white); margin-bottom: 1vh;
+  max-width: 80vw; letter-spacing: -0.03em;
+}
+
+.title-rule { width: 72px; height: 2px; background: var(--gold); margin: 3vh 0 2.5vh; }
+
+.title-subtitle {
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  color: var(--text-dim); max-width: 50vw;
+  line-height: 1.6; font-weight: 400;
+  margin-bottom: 3vh;
+}
+
+.title-meta { display: flex; gap: 4vw; }
+.meta-block { display: flex; flex-direction: column; gap: 5px; }
+.meta-block .meta-key {
+  font-size: 0.58rem; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); opacity: 0.8;
+}
+.meta-block .meta-val {
+  font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+  font-weight: 400; color: var(--white);
+}
+
+/* ── AGENDA SLIDE ── */
+#slide-agenda {
+  background:
+    radial-gradient(ellipse at 94% 6%, rgba(201,168,76,0.06) 0%, transparent 38%),
+    var(--navy);
+}
+
+.agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.2vh 1.6vw;
+  flex: 1; align-content: center;
+}
+
+.agenda-card {
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 2vh 1.8vw;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.18s;
+  position: relative; background: var(--card-bg);
+  overflow: hidden;
+}
+
+.agenda-card::after {
+  content: ''; position: absolute;
+  bottom: 0; left: 0; height: 2px; width: 0;
+  background: var(--gold); transition: width 0.25s ease;
+}
+
+.agenda-card:hover::after { width: 100%; }
+.agenda-card:hover { border-color: rgba(201,168,76,0.55); transform: translateY(-3px); }
+
+/* 0% = bright/prominent; active = gold; 100% done = dimmed */
+.agenda-card {
+  /* base is bright — untouched items should stand out */
+}
+.agenda-card.status-done {
+  border-color: rgba(150,150,160,0.2);
+  background: rgba(150,150,160,0.03);
+  opacity: 0.45;
+}
+.agenda-card.status-done::after  { width: 100%; background: rgba(150,150,160,0.45); }
+.agenda-card.status-done:hover   { opacity: 0.75; }
+/* Connector line — shown when this section is active (JS-controlled via .card-connector) */
+
+.agenda-card-num-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 1.2vh;
+}
+/* Big agenda number */
+.agenda-card-num {
+  font-size: clamp(2.2rem, 3.8vw, 3.5rem);
+  font-weight: 700; line-height: 1;
+  color: var(--gold);
+  opacity: 0.85;
+  letter-spacing: -0.05em;
+  transition: color 0.25s, opacity 0.25s;
+}
+/* active num same as default */
+.status-done   .agenda-card-num { color: rgba(150,150,160,0.5); opacity: 1; }
+
+/* Progress arc (SVG donut) — top right of agenda card */
+.progress-arc-wrap {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+}
+.progress-arc-wrap svg { display: block; }
+.arc-track {
+  fill: none; stroke: rgba(201,168,76,0.18); stroke-width: 5;
+}
+.arc-fill {
+  fill: none; stroke: var(--gold); stroke-width: 5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s cubic-bezier(.4,0,.2,1), stroke 0.3s;
+}
+.arc-fill.arc-done { stroke: rgba(150,150,160,0.45); }
+.arc-tick {
+  font-size: 7px; font-weight: 700;
+  fill: rgba(150,150,160,0.45); text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.agenda-card-label {
+  font-size: clamp(1rem, 1.35vw, 1.25rem);
+  font-weight: 700; color: var(--white);
+  display: block; margin-bottom: 0.6vh; line-height: 1.3;
+}
+
+.agenda-card-footer {
+  border-top: 1px solid rgba(201,168,76,0.1);
+  padding-top: 0.8vh; margin-top: auto;
+}
+
+/* Description sits below the rule */
+.agenda-card-sub {
+  font-size: clamp(0.68rem, 0.85vw, 0.8rem);
+  color: var(--text-muted); line-height: 1.5;
+  display: block;
+  font-weight: 400;
+}
+
+/* Mini dot strip on agenda cards */
+.agenda-card-dots {
+  display: flex; gap: 4px; align-items: center; flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.agenda-mini-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(201,168,76,0.15);
+  transition: background 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+.agenda-mini-dot.active { background: var(--gold); transform: scale(1.4); }
+.agenda-mini-dot.done   { background: rgba(150,150,160,0.45); }
+
+/* ── SECTION DIVIDER ── */
+.section-divider {
+  justify-content: center;
+  background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy) 60%);
+}
+
+.section-divider::before {
+  content: ''; position: absolute;
+  top: 0; right: 0; width: 3px; height: 100%;
+  background: linear-gradient(180deg, var(--gold) 0%, transparent 100%);
+}
+
+.section-divider .big-num {
+  position: absolute; right: 5vw; bottom: 8vh;
+  font-size: clamp(7rem, 14vw, 14rem);
+  font-weight: 700; color: rgba(201,168,76,0.055);
+  line-height: 1; letter-spacing: -0.05em;
+}
+
+.divider-section-label {
+  font-size: 0.65rem; font-weight: 700;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 2.5vh;
+  display: flex; align-items: center; gap: 12px;
+}
+.divider-section-label::before { content: ''; width: 22px; height: 2px; background: var(--gold); }
+
+.section-divider h1 {
+  font-size: clamp(3.8rem, 8vw, 7.5rem);
+  font-weight: 700; line-height: 1.04;
+  max-width: 75vw; color: var(--white);
+  letter-spacing: -0.03em;
+}
+
+.divider-sub {
+  font-size: clamp(1rem, 1.4vw, 1.3rem);
+  color: var(--text-dim); margin-top: 2vh;
+  max-width: 50vw; line-height: 1.6; font-weight: 400;
+}
+
+/* ── RETURN BUTTON ── */
+
+
+/* ── NAV FOOTER ── */
+#nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 2vw;
+  height: 68px;
+  border-top: 1px solid rgba(201,168,76,0.15);
+  background: rgba(10,20,38,0.97);
+  flex-shrink: 0; z-index: 2; position: relative;
+}
+
+/* Next slide title / current agenda label */
+.nav-next-title {
+  font-size: 0.65rem; color: var(--text-dim);
+  letter-spacing: 0.05em;
+  max-width: 200px; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+  text-align: right; font-weight: 600;
+}
+.nav-page-pos {
+  font-size: 0.6rem; color: var(--text-muted);
+  font-weight: 400; margin-left: 4px;
+}
+
+.nav-left { display: flex; align-items: center; gap: 10px; }
+.nav-right { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+
+.nav-btn {
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(201,168,76,0.28); background: transparent;
+  border-radius: 22px;
+  color: var(--text-dim);
+  font-family: 'Arial Rounded MT Bold', 'Arial Rounded', sans-serif;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.nav-btn.icon-btn {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  font-size: 1.1rem; padding: 0;
+}
+.nav-btn:hover:not(:disabled) {
+  color: var(--gold); border-color: var(--gold);
+  background: rgba(201,168,76,0.07);
+}
+.nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+.nav-btn.primary {
+  background: var(--gold); border-color: var(--gold);
+  color: var(--navy);
+}
+.nav-btn.primary:hover:not(:disabled) {
+  background: var(--gold-light); border-color: var(--gold-light); color: var(--navy);
+}
+
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+
+/* ── UNIFIED AGENDA NAV STRIP ── */
+.dot-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Numbered capsule — width set dynamically by JS via --pill-w */
+.agenda-num-pill {
+  height: 28px;
+  min-width: 28px;
+  width: var(--pill-w, 28px);
+  border-radius: 14px;
+  border: 1px solid rgba(201,168,76,0.2);
+  background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; font-weight: 700;
+  color: rgba(247,245,240,0.28);
+  cursor: pointer;
+  letter-spacing: 0;
+  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.18s, width 0.3s;
+  flex-shrink: 0;
+}
+.agenda-num-pill:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201,168,76,0.08);
+  transform: scale(1.08);
+}
+.agenda-num-pill.done {
+  color: rgba(150,150,160,0.45);
+  border-color: rgba(150,150,160,0.25);
+  background: rgba(150,150,160,0.06);
+}
+.agenda-num-pill.active-a {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.1);
+}
+
+/* Dot group capsule — current section's pages */
+.dot-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.dot-group-dots {
+  display: flex; gap: 6px; align-items: center;
+  background: rgba(201,168,76,0.07);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 12px;
+  padding: 5px 10px;
+}
+
+/* iOS page dots */
+.dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(201,168,76,0.22);
+  cursor: pointer;
+  transition: background 0.22s, transform 0.22s;
+  flex-shrink: 0;
+}
+.dot:hover { background: rgba(201,168,76,0.5); }
+.dot.active {
+  background: var(--gold);
+  transform: scale(1.55);
+  box-shadow: 0 0 6px rgba(201,168,76,0.55);
+}
+.dot.done { background: rgba(150,150,160,0.45); }
+
+#slide-counter { display: none; }
+
+/* Reset button */
+.btn-reset {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.2);
+  background: transparent;
+  color: rgba(247,245,240,0.3);
+  font-size: 0.75rem; cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.btn-reset:hover {
+  color: var(--gold); border-color: var(--gold);
+}
+.image-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0; flex: 1;
+  margin: 0 -5vw -2.5vh;
+}
+.image-split.image-right { direction: rtl; }
+.image-split.image-right > * { direction: ltr; }
+
+.image-pane {
+  background: var(--navy-mid);
+  overflow: hidden; position: relative;
+}
+.image-pane img {
+  width: 100%; height: 100%;
+  object-fit: cover; opacity: 0.85;
+  display: block;
+}
+.image-pane-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 12px;
+  color: var(--text-muted);
+  font-size: 0.72rem; letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1px dashed rgba(201,168,76,0.2);
+}
+.image-pane-placeholder::before {
+  content: '⬚';
+  font-size: 2.5rem;
+  color: rgba(201,168,76,0.2);
+}
+
+.image-content {
+  padding: 4vh 3vw;
+  display: flex; flex-direction: column; justify-content: center;
+}
+
+.image-content ul {
+  list-style: none; display: flex; flex-direction: column; gap: 1.2vh;
+  margin-top: 1vh;
+}
+.image-content ul li {
+  display: flex; gap: 12px;
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+  line-height: 1.55; color: rgba(247,245,240,0.85);
+}
+.image-content ul li::before {
+  content: '—'; color: var(--gold); opacity: 0.65; flex-shrink: 0;
+}
+
+/* ── QUOTE SLIDE ── */
+.quote-slide {
+  justify-content: center; align-items: flex-start;
+  background:
+    radial-gradient(ellipse at 85% 15%, rgba(201,168,76,0.07) 0%, transparent 45%),
+    var(--navy);
+}
+.quote-mark {
+  font-size: clamp(5rem, 10vw, 9rem);
+  line-height: 0.7;
+  color: var(--gold); opacity: 0.25;
+  font-family: Georgia, serif;
+  margin-bottom: 1vh;
+}
+.quote-text {
+  font-size: clamp(1.5rem, 2.8vw, 2.6rem);
+  font-weight: 700; line-height: 1.3;
+  color: var(--white); max-width: 78vw;
+  letter-spacing: -0.01em;
+  margin-bottom: 3vh;
+}
+.quote-attribution {
+  display: flex; align-items: center; gap: 14px;
+}
+.quote-attribution::before {
+  content: ''; width: 36px; height: 2px; background: var(--gold);
+}
+.quote-author {
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  color: var(--gold); font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.quote-role {
+  font-size: clamp(0.75rem, 0.9vw, 0.88rem);
+  color: var(--text-dim); margin-left: 4px;
+}
+
+/* ── STAT SLIDE ── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2vh 2vw;
+  flex: 1; align-content: center;
+}
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 3vh 2.5vw;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+.stat-value {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 700; color: var(--gold);
+  line-height: 1; letter-spacing: -0.03em;
+  margin-bottom: 0.8vh;
+}
+.stat-label {
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  color: var(--text-dim); font-weight: 400;
+  line-height: 1.4; margin-bottom: 1.2vh;
+}
+.stat-delta {
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 3px 10px; border-radius: 20px;
+  display: inline-block;
+}
+.stat-delta.up   { background: rgba(94,201,136,0.15); color: var(--done-color); }
+.stat-delta.down { background: rgba(255,90,90,0.12);  color: #f87171; }
+.stat-delta.flat { background: rgba(201,168,76,0.12); color: var(--gold); }
+
+/* Connector line from active agenda card down toward nav strip */
+.card-connector {
+  position: absolute;
+  bottom: -1px; left: 50%;
+  transform: translateX(-50%);
+  width: 2px; height: 0;
+  background: linear-gradient(180deg, var(--gold) 0%, rgba(201,168,76,0.2) 100%);
+  border-radius: 1px;
+  transition: height 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s;
+  opacity: 0;
+  pointer-events: none;
+}
+.card-connector.visible {
+  height: 18px;
+  opacity: 1;
+}
+/* Pulse dot at the tip of the connector */
+.card-connector.visible::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 50%;
+  transform: translateX(-50%);
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(201,168,76,0.7);
+  animation: connectorPulse 1.8s ease infinite;
+}
+@keyframes connectorPulse {
+  0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  50%       { opacity: 0.5; transform: translateX(-50%) scale(1.5); }
+}
+
+/* ── TIMELINE SLIDE ── */
+.timeline {
+  list-style: none; display: flex; flex-direction: column;
+  gap: 0; flex: 1; justify-content: center; max-width: 820px;
+}
+.timeline-item {
+  display: flex; gap: 2vw; align-items: flex-start;
+  padding: 1.4vh 0; position: relative;
+}
+.timeline-item:not(:last-child)::after {
+  content: ''; position: absolute;
+  left: calc(1.2rem - 1px); top: calc(1.4vh + 1.4rem);
+  width: 2px; height: calc(100% - 1.4rem);
+  background: linear-gradient(180deg, rgba(201,168,76,0.4), rgba(201,168,76,0.08));
+}
+.tl-marker {
+  flex-shrink: 0; width: 2.4rem; height: 2.4rem;
+  border-radius: 50%; border: 2px solid rgba(201,168,76,0.4);
+  background: var(--navy-mid);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem; font-weight: 700; color: var(--gold);
+  z-index: 1;
+}
+.tl-content { flex: 1; padding-top: 0.3rem; }
+.tl-title {
+  font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+  font-weight: 700; color: var(--white); margin-bottom: 0.3vh;
+}
+.tl-desc {
+  font-size: clamp(0.8rem, 1vw, 0.95rem);
+  color: var(--text-dim); line-height: 1.5;
+}
+.tl-date {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+  color: var(--gold); opacity: 0.7; margin-left: auto;
+  white-space: nowrap; padding-top: 0.3rem; flex-shrink: 0;
+}
+
+/* ── CHECKLIST SLIDE ── */
+.checklist {
+  list-style: none; display: flex; flex-direction: column;
+  gap: 0; max-width: 820px;
+}
+.checklist li {
+  display: flex; align-items: center; gap: 1.4vw;
+  padding: 1.3vh 1vw;
+  border-bottom: 1px solid rgba(201,168,76,0.08);
+  border-radius: 8px;
+  transition: background 0.15s;
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  color: var(--text);
+}
+.checklist li:first-child { border-top: 1px solid rgba(201,168,76,0.08); }
+.checklist li:hover { background: rgba(201,168,76,0.03); }
+.chk-box {
+  flex-shrink: 0; width: 1.5rem; height: 1.5rem;
+  border-radius: 6px; border: 2px solid rgba(201,168,76,0.35);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; color: transparent;
+}
+.chk-box.checked {
+  background: var(--done-color); border-color: var(--done-color);
+  color: var(--navy);
+}
+.chk-box.partial {
+  border-color: var(--gold); background: rgba(201,168,76,0.12);
+  color: var(--gold);
+}
+.chk-owner {
+  margin-left: auto; font-size: 0.65rem; font-weight: 700;
+  letter-spacing: 0.08em; color: var(--text-muted);
+  white-space: nowrap; flex-shrink: 0;
+}
+
+/* ── FULLBLEED IMAGE SLIDE ── */
+.fullbleed-slide {
+  padding: 0 !important;
+  justify-content: flex-end;
+}
+.fullbleed-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+}
+.fullbleed-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(0deg,
+    rgba(11,26,46,0.92) 0%,
+    rgba(11,26,46,0.55) 50%,
+    rgba(11,26,46,0.2) 100%);
+}
+.fullbleed-content {
+  position: relative; z-index: 2;
+  padding: 4vh 5vw 10vh;
+  max-width: 70vw;
+}
+.fullbleed-content h2 {
+  font-size: clamp(2.8rem, 5.5vw, 5rem);
+  max-width: 100%;
+}
+.fullbleed-caption {
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  color: rgba(247,245,240,0.75);
+  line-height: 1.6; margin-top: 1.5vh;
+  max-width: 55vw;
+}
+
+/* ── HORIZONTAL TIMELINE SLIDE ── */
+.htl-wrap {
+  flex: 1; display: flex; flex-direction: column; justify-content: center;
+  padding: 2vh 0;
+  overflow: visible;
+}
+/* The scrollable track container */
+.htl-track-area {
+  position: relative;
+  padding: 10vh 3vw 3vh;
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+}
+.htl-track-area::-webkit-scrollbar { display: none; }
+
+/* Spine line */
+.htl-spine {
+  position: absolute;
+  top: calc(10vh + 18px);
+  left: 3vw; right: 3vw;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(201,168,76,0.35) 4%,
+    rgba(201,168,76,0.35) 96%,
+    transparent 100%);
+}
+/* Progress fill on spine */
+.htl-spine-fill {
+  position: absolute;
+  top: calc(10vh + 18px);
+  left: 3vw;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  transition: width 0.6s cubic-bezier(.4,0,.2,1);
+}
+
+/* Events row */
+.htl-events {
+  display: flex;
+  gap: 0;
+  position: relative;
+  min-width: max-content;
+}
+
+.htl-event {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 2vw;
+  min-width: 140px;
+  position: relative;
+}
+
+/* Dot on spine */
+.htl-dot {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 2px solid rgba(201,168,76,0.4);
+  background: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.58rem; font-weight: 700; color: var(--gold);
+  letter-spacing: 0.05em;
+  position: relative; z-index: 3;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.2s;
+  flex-shrink: 0;
+  cursor: pointer;
+  isolation: isolate;
+}
+
+@keyframes htlBlink {
+  0%, 100% {
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.35), 0 0 12px rgba(201,168,76,0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgba(201,168,76,0.08), 0 0 36px rgba(201,168,76,0.75);
+    transform: scale(1.12);
+  }
+}
+
+/* Hover — lift and brighten any dot */
+.htl-event:hover .htl-dot {
+  transform: scale(1.25);
+  border-color: var(--gold);
+  animation: htlBlink 1s ease-in-out infinite;
+}
+.htl-event:hover .htl-title { color: var(--white); opacity: 1; }
+.htl-event:hover .htl-date  { opacity: 1; color: var(--gold); }
+.htl-event:hover .htl-desc  { color: rgba(247,245,240,0.7); }
+
+/* Dim all others when any is hovered */
+.htl-events:has(.htl-event:hover) .htl-event:not(:hover) {
+  opacity: 0.35;
+  transition: opacity 0.2s;
+}
+.htl-event { transition: opacity 0.2s; }
+
+/* Tooltip — fixed overlay, positioned via JS to avoid clip issues */
+.htl-tooltip-overlay {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 100;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  transform: translateY(6px);
+}
+.htl-tooltip-overlay.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.htl-tooltip-box {
+  background: var(--navy-mid);
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: 10px;
+  padding: 1.2vh 1.4vw;
+  min-width: 170px; max-width: 240px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  white-space: normal;
+  position: relative;
+}
+.htl-tooltip-box::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%; transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-top-color: rgba(201,168,76,0.4);
+}
+.htl-tooltip-date {
+  font-size: 0.55rem; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 0.5vh;
+}
+.htl-tooltip-title {
+  font-size: 0.9rem; font-weight: 700;
+  color: var(--white); margin-bottom: 0.4vh; line-height: 1.3;
+}
+.htl-tooltip-desc {
+  font-size: 0.75rem; color: var(--text-dim); line-height: 1.5;
+}
+.htl-tooltip-status {
+  display: inline-block; margin-top: 0.6vh;
+  font-size: 0.55rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; padding: 2px 8px;
+  border-radius: 10px;
+}
+.htl-tooltip-status.past    { background: rgba(201,168,76,0.12); color: var(--gold); }
+.htl-tooltip-status.current { background: rgba(201,168,76,0.22); color: var(--gold-light); }
+.htl-tooltip-status.future  { background: rgba(150,150,160,0.12); color: rgba(150,150,160,0.7); }
+.htl-event.past .htl-dot {
+  background: rgba(201,168,76,0.12);
+  border-color: var(--gold);
+}
+.htl-event.current .htl-dot {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy);
+  animation: htlBlink 1.1s ease-in-out infinite;
+}
+.htl-event.future .htl-dot {
+  border-color: rgba(201,168,76,0.2);
+  color: var(--text-muted);
+}
+
+/* Label below dot */
+.htl-label {
+  margin-top: 1.2vh;
+  text-align: center;
+}
+.htl-date {
+  font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold); opacity: 0.7; margin-bottom: 0.4vh;
+}
+.htl-event.future .htl-date { color: var(--text-muted); opacity: 0.5; }
+.htl-event.current .htl-date { color: var(--gold); opacity: 1; }
+
+.htl-title {
+  font-size: clamp(0.78rem, 1vw, 0.92rem);
+  font-weight: 700; color: var(--white);
+  line-height: 1.3; max-width: 130px;
+}
+.htl-event.future .htl-title { color: var(--text-dim); }
+.htl-event.current .htl-title { color: var(--white); }
+
+.htl-desc {
+  font-size: clamp(0.65rem, 0.8vw, 0.75rem);
+  color: var(--text-muted); line-height: 1.4;
+  margin-top: 0.3vh; max-width: 130px;
+}
+
+/* Tick mark from dot up to event card for alternating layout */
+.htl-tick {
+  width: 1px; height: 1.8vh;
+  background: rgba(201,168,76,0.25);
+  flex-shrink: 0;
+}
+
+/* ── ENDING SLIDE ── */
+#slide-end {
+  justify-content: center; align-items: center;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(201,168,76,0.07) 0%, transparent 60%),
+    var(--navy);
+}
+.end-inner {
+  display: flex; flex-direction: column; align-items: center; gap: 2.5vh;
+  animation: fadeUp 0.7s ease both;
+}
+.end-rule {
+  width: 48px; height: 2px; background: var(--gold); margin: 0 auto;
+}
+.end-title {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 700; color: var(--white);
+  letter-spacing: -0.03em; line-height: 1.1;
+}
+.end-sub {
+  font-size: clamp(0.9rem, 1.3vw, 1.15rem);
+  color: var(--text-dim); max-width: 42vw;
+  line-height: 1.7; font-weight: 400;
+}
+.end-org {
+  font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(160,180,210,0.5); margin-top: 1vh;
+}
+.end-agenda-grid {
+  display: flex; gap: 1.2vw; margin-top: 1.5vh;
+  flex-wrap: wrap; justify-content: center;
+}
+.end-agenda-pill {
+  font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 4px 14px; border-radius: 20px;
+  border: 1px solid rgba(201,168,76,0.2);
+  color: rgba(247,245,240,0.3);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.end-agenda-pill:hover {
+  color: var(--gold); border-color: var(--gold);
+  background: rgba(201,168,76,0.06);
+}
+.end-agenda-pill.done {
+  color: rgba(150,150,160,0.45);
+  border-color: rgba(150,150,160,0.2);
+  text-decoration: line-through;
+}
+
+/* ── KEYBOARD HINT ── */
+.key-hint {
+  position: fixed; bottom: 72px; right: 20px;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  opacity: 0;
+  animation: fadeHint 4s ease 1.5s forwards;
+  pointer-events: none;
+  z-index: 50;
+}
+
+@keyframes fadeHint {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div class="key-hint">← → Arrow keys to navigate · A for agenda</div>
+
+<div id="deck">
+  <!-- Slides are injected here by JavaScript -->
+</div>
+
+<nav id="nav">
+  <div class="nav-left">
+    <button class="nav-btn icon-btn" id="btn-prev" onclick="changeSlide(-1)" title="Previous">&#8592;</button>
+    <button class="btn-reset" id="btn-reset" onclick="resetDeck()" title="Reset progress">R</button>
+  </div>
+
+  <div class="nav-center">
+    <div class="dot-row" id="dot-row"></div>
+    <div id="slide-counter"></div>
+  </div>
+
+  <div class="nav-right">
+    <span class="nav-next-title" id="nav-next-title"></span>
+    <button class="nav-btn icon-btn primary" id="btn-next" onclick="changeSlide(1)" title="Next">&#8594;</button>
+  </div>
+</nav>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  DECK ENGINE — reads MEETING_CONFIG and AGENDA from agenda-data.js
+// ══════════════════════════════════════════════════════════
+
+const deck = document.getElementById('deck');
+let slides = [];
+let current = 0;
+let slideMap = []; // { sectionIndex, type }
+
+// Track visited state
+const visitedSections = new Set();
+const visitedSlides = new Set(); // tracks each individual slide index
+
+// ── Date helper ──
+function formatDate(d) {
+  return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+// ── SLIDE BUILDERS ──────────────────────────────────────────
+
+function el(tag, cls, inner) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (inner !== undefined) e.innerHTML = inner;
+  return e;
+}
+
+function orgMark() {
+  const wrap = el('div', 'org-mark');
+  const text = (MEETING_CONFIG.org || 'AIS Academy').toUpperCase();
+  text.split('').forEach((ch, i) => {
+    const span = el('span', 'org-mark-char', ch === ' ' ? '&nbsp;' : ch);
+    span.style.animationDelay = `${i * 0.06}s`;
+    wrap.appendChild(span);
+  });
+  return wrap;
+}
+
+function eyebrow(text) {
+  const d = el('div', 'slide-eyebrow');
+  d.appendChild(el('div', 'eyebrow-rule'));
+  d.appendChild(el('span', 'eyebrow-text', text));
+  return d;
+}
+
+function buildTitleSlide() {
+  const s = el('div', 'slide');
+  s.id = 'slide-title';
+
+  const dateStr = MEETING_CONFIG.date || formatDate(new Date());
+
+  s.appendChild(orgMark());
+  s.innerHTML += `
+    <div class="title-firm">${MEETING_CONFIG.org || "AIS Academy"} — ${MEETING_CONFIG.title}</div>
+    <div class="title-main">${MEETING_CONFIG.title.replace(' Meeting', '<br>Meeting')}</div>
+    <p class="title-subtitle">${MEETING_CONFIG.subtitle}</p>
+    <div class="title-rule"></div>
+    <div class="title-meta">
+      <div class="meta-block">
+        <span class="meta-key">Date</span>
+        <span class="meta-val">${dateStr}</span>
+      </div>
+      <div class="meta-block">
+        <span class="meta-key">By</span>
+        <span class="meta-val">${MEETING_CONFIG.by}</span>
+      </div>
+      <div class="meta-block">
+        <span class="meta-key">Duration</span>
+        <span class="meta-val">${MEETING_CONFIG.duration}</span>
+      </div>
+    </div>
+  `;
+  return s;
+}
+
+function buildAgendaSlide() {
+  const s = el('div', 'slide');
+  s.id = 'slide-agenda';
+  s.appendChild(orgMark());
+
+  const topRow = el('div');
+  topRow.appendChild(eyebrow('Today\'s Agenda'));
+
+  const h = el('h2');
+  h.textContent = "Today's Agenda";
+  topRow.appendChild(h);
+  s.appendChild(topRow);
+
+  const grid = el('div', 'agenda-grid');
+  grid.id = 'agenda-grid';
+  s.appendChild(grid);
+  return s;
+}
+
+function buildDividerSlide(sectionIdx, section) {
+  const s = el('div', 'slide section-divider');
+  const num = String(sectionIdx + 1).padStart(2, '0');
+  s.appendChild(orgMark());
+  s.innerHTML += `
+    <div class="divider-section-label">Agenda ${num}</div>
+    <h1>${formatDividerTitle(section.label)}</h1>
+    <p class="divider-sub">${getDividerSub(section.label)}</p>
+    <div class="big-num">${num}</div>
+  `;
+  return s;
+}
+
+function formatDividerTitle(label) {
+  const words = label.split(' ');
+  const mid = Math.ceil(words.length / 2);
+  return words.length <= 2
+    ? words.join('<br>')
+    : `${words.slice(0, mid).join(' ')}<br>${words.slice(mid).join(' ')}`;
+}
+
+function getDividerSub(label) {
+  const map = {
+    "Wins & Updates":   "What got done since last week.",
+    "Priorities":       "What we're focused on right now.",
+    "Blockers & Risks": "Where we need help or alignment.",
+    "Decisions Needed": "Items requiring a call from this group.",
+    "Action Items":     "Ownership, accountability, and next steps.",
+  };
+  return map[label] || "Reviewing this section now.";
+}
+
+function buildReturnBtn() {
+  const b = el('button', 'btn-return');
+  b.innerHTML = '↩ AGENDA';
+  b.onclick = goToAgenda;
+  return b;
+}
+
+function buildBulletsSlide(sectionLabel, slide) {
+  const s = el('div', 'slide');
+  s.appendChild(orgMark());
+  s.appendChild(eyebrow(sectionLabel));
+  const h = el('h2');
+  h.textContent = slide.title;
+  s.appendChild(h);
+  const content = el('div', 'content');
+  const ul = el('ul', 'bullets');
+  slide.items.forEach((item, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="bullet-num">0${i+1}</span><span>${item}</span>`;
+    ul.appendChild(li);
+  });
+  content.appendChild(ul);
+  s.appendChild(content);
+  return s;
+}
+
+function buildTwoColSlide(sectionLabel, slide) {
+  const s = el('div', 'slide');
+  s.appendChild(orgMark());
+  s.appendChild(eyebrow(sectionLabel));
+  const h = el('h2');
+  h.textContent = slide.title;
+  s.appendChild(h);
+  const content = el('div', 'content');
+  const grid = el('div', 'two-col');
+
+  [slide.left, slide.right].forEach(col => {
+    const card = el('div', 'card');
+    const heading = el('div', 'card-heading', col.heading);
+    card.appendChild(heading);
+    const ul = el('ul');
+    col.items.forEach(item => {
+      const li = el('li');
+      li.innerHTML = item;
+      ul.appendChild(li);
+    });
+    card.appendChild(ul);
+    grid.appendChild(card);
+  });
+
+  content.appendChild(grid);
+  s.appendChild(content);
+  return s;
+}
+
+function buildClosingSlide(sectionLabel, slide) {
+  const s = el('div', 'slide');
+  s.appendChild(orgMark());
+  s.appendChild(eyebrow(sectionLabel));
+  const h = el('h2');
+  h.textContent = slide.title;
+  s.appendChild(h);
+
+  const content = el('div', 'content');
+  const grid = el('div', 'closing-grid');
+
+  // Left: action items card
+  const leftCard = el('div', 'card');
+  const lHeading = el('div', 'card-heading', 'Action Items');
+  leftCard.appendChild(lHeading);
+  const ul = el('ul');
+  slide.actions.forEach(a => {
+    const li = el('li');
+    li.innerHTML = a;
+    ul.appendChild(li);
+  });
+  leftCard.appendChild(ul);
+  grid.appendChild(leftCard);
+
+  // Right: next meeting card
+  const rightCard = el('div', 'closing-next');
+  rightCard.innerHTML = `
+    <div class="next-label">Next Meeting</div>
+    <div class="next-when">${slide.next.when}</div>
+    <div class="next-preread">
+      <div class="preread-label">Pre-read</div>
+      ${slide.next.prereads}
+    </div>
+  `;
+  grid.appendChild(rightCard);
+
+  content.appendChild(grid);
+  s.appendChild(content);
+  return s;
+}
+
+function buildImageSlide(sectionLabel, slide) {
+  const s = el('div', 'slide');
+  s.appendChild(orgMark());
+  s.style.padding = '4vh 5vw 0';
+  s.appendChild(eyebrow(sectionLabel));
+  const h = el('h2');
+  h.textContent = slide.title;
+  s.appendChild(h);
+
+  const split = el('div', `image-split${slide.type === 'image-right' ? ' image-right' : ''}`);
+
+  // Content pane
+  const contentPane = el('div', 'image-content');
+  if (slide.body) {
+    const p = el('p');
+    p.style.cssText = 'font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.6;color:rgba(247,245,240,0.85);margin-bottom:1.5vh;';
+    p.innerHTML = slide.body;
+    contentPane.appendChild(p);
+  }
+  if (slide.items) {
+    const ul = el('ul');
+    slide.items.forEach(item => {
+      const li = el('li'); li.innerHTML = item; ul.appendChild(li);
+    });
+    contentPane.appendChild(ul);
+  }
+
+  // Image pane
+  const imgPane = el('div', 'image-pane');
+  if (slide.image) {
+    const img = document.createElement('img');
+    img.src = slide.image;
+    img.alt = slide.imageAlt || '';
+    imgPane.appendChild(img);
+  } else {
+    const ph = el('div', 'image-pane-placeholder');
+    ph.innerHTML = `<span>Add image URL in<br>agenda-data</span>`;
+    imgPane.appendChild(ph);
+  }
+
+  if (slide.type === 'image-right') {
+    split.appendChild(contentPane);
+    split.appendChild(imgPane);
+  } else {
+    split.appendChild(imgPane);
+    split.appendChild(contentPane);
+  }
+  s.appendChild(split);
+  return s;
+}
+
+function buildQuoteSlide(sectionLabel, slide) {
+  const s = el('div', 'slide quote-slide');
+  s.appendChild(orgMark());
+  s.appendChild(eyebrow(sectionLabel));
+  s.innerHTML += `
+    <div class="quote-mark">"</div>
+    <div class="quote-text">${slide.quote}</div>
+    <div class="quote-attribution">
+      <span class="quote-author">${slide.author}</span>
+      ${slide.role ? `<span class="quote-role">— ${slide.role}</span>` : ''}
+    </div>
+  `;
+  // Re-attach return btn (innerHTML overwrites it)
+  return s;
+}
+
+function buildStatSlide(sectionLabel, slide) {
+  const s = el('div', 'slide');
+  s.appendChild(orgMark());
+  s.appendChild(eyebrow(sectionLabel));
+  const h = el('h2'); h.textContent = slide.title; s.appendChild(h);
+  const content = el('div', 'content');
+  const grid = el('div', 'stat-grid');
+  slide.stats.forEach(stat => {
+    const card = el('div', 'stat-card');
+    const deltaClass = stat.trend === 'up' ? 'up' : stat.trend === 'down' ? 'down' : 'flat';
+    card.innerHTML = `
+      <div class="stat-value">${stat.value}</div>
+      <div class="stat-label">${stat.label}</div>
+      ${stat.delta ? `<span class="stat-delta ${deltaClass}">${stat.delta}</span>` : ''}
+    `;
+    grid.appendChild(card);
+  });
+  content.appendChild(grid);
+  s.appendChild(content);
+  return s;
+}
+
+
+function buildTimelineSlide(sectionLabel, slide) {
+  const s = el('div', 'slide');
+  s.appendChild(orgMark());
+  s.appendChild(eyebrow(sectionLabel));
+  const h = el('h2'); h.textContent = slide.title; s.appendChild(h);
+  const content = el('div', 'content');
+  const ul = el('ul', 'timeline');
+  slide.items.forEach((item, i) => {
+    const li = el('li', 'timeline-item');
+    li.innerHTML = `
+      <div class="tl-marker">${String(i+1).padStart(2,'0')}</div>
+      <div class="tl-content">
+        <div class="tl-title">${item.title}</div>
+        ${item.desc ? `<div class="tl-desc">${item.desc}</div>` : ''}
+      </div>
+      ${item.date ? `<div class="tl-date">${item.date}</div>` : ''}
+    `;
+    ul.appendChild(li);
+  });
+  content.appendChild(ul);
+  s.appendChild(content);
+  return s;
+}
+
+function buildChecklistSlide(sectionLabel, slide) {
+  const s = el('div', 'slide');
+  s.appendChild(orgMark());
+  s.appendChild(eyebrow(sectionLabel));
+  const h = el('h2'); h.textContent = slide.title; s.appendChild(h);
+  const content = el('div', 'content');
+  const ul = el('ul', 'checklist');
+  slide.items.forEach(item => {
+    const li = el('li');
+    const status = item.status || 'none'; // 'checked' | 'partial' | 'none'
+    const checkMark = status === 'checked' ? '✓' : status === 'partial' ? '—' : '';
+    li.innerHTML = `
+      <span class="chk-box ${status === 'checked' ? 'checked' : status === 'partial' ? 'partial' : ''}">${checkMark}</span>
+      <span>${item.text}</span>
+      ${item.owner ? `<span class="chk-owner">${item.owner}</span>` : ''}
+    `;
+    ul.appendChild(li);
+  });
+  content.appendChild(ul);
+  s.appendChild(content);
+  return s;
+}
+
+function buildFullbleedSlide(sectionLabel, slide) {
+  const s = el('div', 'slide fullbleed-slide');
+  s.appendChild(orgMark());
+  // Background image
+  const bg = el('div', 'fullbleed-bg');
+  bg.style.backgroundImage = `url('${slide.image}')`;
+  s.appendChild(bg);
+  s.appendChild(el('div', 'fullbleed-overlay'));
+  const fc = el('div', 'fullbleed-content');
+  fc.appendChild(eyebrow(sectionLabel));
+  const h = el('h2'); h.textContent = slide.title; fc.appendChild(h);
+  if (slide.caption) {
+    const cap = el('p', 'fullbleed-caption', slide.caption);
+    fc.appendChild(cap);
+  }
+  s.appendChild(fc);
+  return s;
+}
+
+
+function buildHorizontalTimelineSlide(sectionLabel, slide) {
+  const s = el('div', 'slide');
+  s.appendChild(orgMark());
+  s.appendChild(eyebrow(sectionLabel));
+  const h = el('h2'); h.textContent = slide.title; s.appendChild(h);
+
+  const wrap = el('div', 'htl-wrap');
+  const trackArea = el('div', 'htl-track-area');
+
+  trackArea.appendChild(el('div', 'htl-spine'));
+
+  const currentIdx = slide.items.findIndex(item => item.status === 'current');
+
+  const spineFill = el('div', 'htl-spine-fill');
+  trackArea.appendChild(spineFill);
+
+  const eventsRow = el('div', 'htl-events');
+
+  // Tooltip overlay — lives on the slide, not inside trackArea
+  const tooltipOverlay = el('div', 'htl-tooltip-overlay');
+  const tooltipBox = el('div', 'htl-tooltip-box');
+  tooltipOverlay.appendChild(tooltipBox);
+  s.appendChild(tooltipOverlay);
+
+  slide.items.forEach((item, i) => {
+    const statusClass = item.status || (i < currentIdx ? 'past' : i === currentIdx ? 'current' : 'future');
+    const ev = el('div', `htl-event ${statusClass}`);
+
+    const dot = el('div', 'htl-dot', item.marker || String(i + 1).padStart(2,'0'));
+    ev.appendChild(dot);
+
+    const tick = el('div', 'htl-tick');
+    ev.appendChild(tick);
+
+    const label = el('div', 'htl-label');
+    if (item.date) label.appendChild(el('div', 'htl-date', item.date));
+    label.appendChild(el('div', 'htl-title', item.title));
+    if (item.desc) label.appendChild(el('div', 'htl-desc', item.desc));
+    ev.appendChild(label);
+
+    // Store tooltip data on the event element
+    ev.dataset.tipDate   = item.date   || '';
+    ev.dataset.tipTitle  = item.title  || '';
+    ev.dataset.tipDesc   = item.desc   || '';
+    ev.dataset.tipStatus = statusClass;
+
+    // Show tooltip on mouseenter
+    ev.addEventListener('mouseenter', () => {
+      tooltipBox.innerHTML = `
+        ${ev.dataset.tipDate ? `<div class="htl-tooltip-date">${ev.dataset.tipDate}</div>` : ''}
+        <div class="htl-tooltip-title">${ev.dataset.tipTitle}</div>
+        ${ev.dataset.tipDesc ? `<div class="htl-tooltip-desc">${ev.dataset.tipDesc}</div>` : ''}
+        <span class="htl-tooltip-status ${ev.dataset.tipStatus}">${ev.dataset.tipStatus}</span>
+      `;
+      // Position: centred on the dot, above the dot
+      const dotRect  = dot.getBoundingClientRect();
+      const slideRect = s.getBoundingClientRect();
+      const tipW = 200; // approximate width
+      let left = dotRect.left - slideRect.left + dotRect.width / 2 - tipW / 2;
+      // Clamp to slide bounds
+      left = Math.max(8, Math.min(left, slideRect.width - tipW - 8));
+      const top = dotRect.top - slideRect.top - tooltipBox.offsetHeight - 20;
+      tooltipOverlay.style.left = left + 'px';
+      tooltipOverlay.style.top  = top + 'px';
+      tooltipOverlay.style.width = tipW + 'px';
+      tooltipOverlay.classList.add('visible');
+    });
+
+    ev.addEventListener('mouseleave', () => {
+      tooltipOverlay.classList.remove('visible');
+    });
+
+    eventsRow.appendChild(ev);
+  });
+
+  trackArea.appendChild(eventsRow);
+
+  // Spine fill width after render
+  requestAnimationFrame(() => {
+    const dots = trackArea.querySelectorAll('.htl-dot');
+    if (dots.length > 0 && currentIdx >= 0 && currentIdx < dots.length) {
+      const firstRect = dots[0].getBoundingClientRect();
+      const curRect   = dots[currentIdx].getBoundingClientRect();
+      const fillWidth = (curRect.left + curRect.width / 2) - (firstRect.left - firstRect.width / 2);
+      spineFill.style.width = Math.max(0, fillWidth) + 'px';
+    } else if (currentIdx < 0) {
+      spineFill.style.width = '0px';
+    }
+  });
+
+  wrap.appendChild(trackArea);
+  s.appendChild(wrap);
+  return s;
+}
+
+
+function buildEndingSlide() {
+  const s = el('div', 'slide');
+  s.id = 'slide-end';
+  s.appendChild(orgMark());
+
+  const inner = el('div', 'end-inner');
+  inner.innerHTML = `
+    <div class="end-rule"></div>
+    <div class="end-title">That's a Wrap.</div>
+    <p class="end-sub">${MEETING_CONFIG.subtitle}</p>
+    <div class="end-org">${MEETING_CONFIG.org || 'AIS Academy'} &nbsp;·&nbsp; ${MEETING_CONFIG.date || formatDate(new Date())}</div>
+  `;
+
+  // Agenda revisit pills
+  const pillRow = el('div', 'end-agenda-grid');
+  AGENDA.forEach((section, i) => {
+    const pill = el('div', 'end-agenda-pill');
+    pill.textContent = `${String(i+1).padStart(2,'0')} ${section.label}`;
+    pill.id = `end-pill-${i}`;
+    pill.onclick = () => goToSlide(sectionStartSlide(i));
+    pillRow.appendChild(pill);
+  });
+  inner.appendChild(pillRow);
+  s.appendChild(inner);
+  return s;
+}
+
+function updateEndingSlide() {
+  AGENDA.forEach((_, i) => {
+    const pill = document.getElementById(`end-pill-${i}`);
+    if (pill) {
+      pill.className = 'end-agenda-pill' + (visitedSections.has(i) ? ' done' : '');
+    }
+  });
+}
+
+
+function buildDeck() {
+  slides = [];
+  slideMap = [];
+
+  // Title slide
+  const titleSlide = buildTitleSlide();
+  deck.appendChild(titleSlide);
+  slides.push(titleSlide);
+  slideMap.push({ sectionIndex: -1, type: 'title' });
+
+  // Agenda slide
+  const agendaSlide = buildAgendaSlide();
+  deck.appendChild(agendaSlide);
+  slides.push(agendaSlide);
+  slideMap.push({ sectionIndex: -1, type: 'agenda' });
+
+  // Section slides
+  AGENDA.forEach((section, sIdx) => {
+    // Divider
+    const divider = buildDividerSlide(sIdx, section);
+    deck.appendChild(divider);
+    slides.push(divider);
+    slideMap.push({ sectionIndex: sIdx, type: 'divider' });
+
+    // Content slides
+    section.slides.forEach(slide => {
+      let s;
+      if (slide.type === 'bullets')     s = buildBulletsSlide(section.label, slide);
+      if (slide.type === 'twocol')      s = buildTwoColSlide(section.label, slide);
+      if (slide.type === 'closing')     s = buildClosingSlide(section.label, slide);
+      if (slide.type === 'image-left')  s = buildImageSlide(section.label, slide);
+      if (slide.type === 'image-right') s = buildImageSlide(section.label, slide);
+      if (slide.type === 'quote')       s = buildQuoteSlide(section.label, slide);
+      if (slide.type === 'stat')        s = buildStatSlide(section.label, slide);
+      if (slide.type === 'timeline')    s = buildTimelineSlide(section.label, slide);
+      if (slide.type === 'htimeline')   s = buildHorizontalTimelineSlide(section.label, slide);
+      if (slide.type === 'checklist')   s = buildChecklistSlide(section.label, slide);
+      if (slide.type === 'fullbleed')   s = buildFullbleedSlide(section.label, slide);
+      if (s) {
+        deck.appendChild(s);
+        slides.push(s);
+        slideMap.push({ sectionIndex: sIdx, type: 'content' });
+      }
+    });
+  });
+
+  buildDots();
+  buildAgendaGrid();
+
+  // Ending slide
+  const endSlide = buildEndingSlide();
+  deck.appendChild(endSlide);
+  slides.push(endSlide);
+  slideMap.push({ sectionIndex: -1, type: 'end' });
+}
+
+// ── AGENDA GRID ──────────────────────────────────────────────
+
+// Map sectionIndex → first slide index of that section
+function sectionStartSlide(sIdx) {
+  return slideMap.findIndex(m => m.sectionIndex === sIdx);
+}
+
+function makeArcSVG(pct, done) {
+  const r = 10, cx = 14, cy = 14;
+  const circ = 2 * Math.PI * r;
+  const offset = circ * (1 - pct / 100);
+  return `<svg width="28" height="28" viewBox="0 0 28 28">
+    <circle class="arc-track" cx="${cx}" cy="${cy}" r="${r}"/>
+    <circle class="arc-fill${done ? ' arc-done' : ''}"
+      cx="${cx}" cy="${cy}" r="${r}"
+      stroke-dasharray="${circ}"
+      stroke-dashoffset="${offset}"
+      transform="rotate(-90 ${cx} ${cy})"/>
+    ${done ? `<text class="arc-tick" x="${cx}" y="${cy}">✓</text>` : ''}
+  </svg>`;
+}
+
+function buildAgendaGrid() {
+  const grid = document.getElementById('agenda-grid');
+  grid.innerHTML = '';
+  AGENDA.forEach((section, i) => {
+    const card = el('div', 'agenda-card');
+    card.id = `agenda-card-${i}`;
+    const sub = section.description || '';
+    card.innerHTML = `
+      <div class="agenda-card-num-row">
+        <span class="agenda-card-num">${String(i+1).padStart(2,'0')}</span>
+        <div class="progress-arc-wrap" id="arc-${i}">${makeArcSVG(0, false)}</div>
+      </div>
+      <span class="agenda-card-label">${section.label}</span>
+      <div class="agenda-card-footer">
+        ${sub ? `<span class="agenda-card-sub">${sub}</span>` : ''}
+      </div>
+    `;
+    const connector = el('div', 'card-connector');
+    connector.id = `connector-${i}`;
+    card.appendChild(connector);
+    const slideIdx = sectionStartSlide(i);
+    card.onclick = () => goToSlide(slideIdx);
+    grid.appendChild(card);
+  });
+}
+
+function updateAgendaCards() {
+  const currentSection = slideMap[current]?.sectionIndex;
+
+  AGENDA.forEach((_, i) => {
+    const card = document.getElementById(`agenda-card-${i}`);
+    if (!card) return;
+    card.className = 'agenda-card';
+
+    // Compute how many slides in this section have been visited
+    const sectionSlideIndices = slideMap
+      .map((m, idx) => ({ m, idx }))
+      .filter(({ m }) => m.sectionIndex === i)
+      .map(({ idx }) => idx);
+    const total = sectionSlideIndices.length;
+
+    const isActive = (i === currentSection);
+    const isDone = !isActive && visitedSections.has(i);
+
+    // Count genuinely visited slides in this section
+    const seenCount = sectionSlideIndices.filter(idx =>
+      visitedSlides.has(idx) || (isActive && idx === current)
+    ).length;
+    const pct = total > 0 ? Math.round((seenCount / total) * 100) : 0;
+
+    if (isDone) {
+      card.classList.add('status-done');
+    }
+    // active/in-progress = same appearance as not-started (bright, no special class)
+
+    // Arc: hide when unvisited (pct===0), partial when in-progress, tick when done
+    const arcWrap = document.getElementById(`arc-${i}`);
+    if (arcWrap) {
+      if (pct === 0 && !isDone) {
+        arcWrap.innerHTML = ''; // unvisited — show nothing
+      } else {
+        arcWrap.innerHTML = makeArcSVG(isDone ? 100 : pct, isDone);
+      }
+    }
+
+    // Connector line
+    const connector = document.getElementById(`connector-${i}`);
+    if (connector) {
+      connector.className = 'card-connector' + (isActive ? ' visible' : '');
+    }
+  });
+}
+
+// ── DOTS — only for slides within current section ────────────
+
+function buildDots() {
+  // Called once at init with empty dots; real dots built in updateDots()
+  updateDots();
+}
+
+function makeAgendaBtn(id) {
+  const btn = el('div', 'agenda-num-pill agenda-a-btn');
+  btn.textContent = 'A';
+  btn.id = id;
+  btn.title = 'Agenda Overview';
+  btn.onclick = () => goToSlide(1);
+  return btn;
+}
+
+function updateDots() {
+  const row = document.getElementById('dot-row');
+  const counter = document.getElementById('slide-counter');
+  counter.textContent = '';
+  row.innerHTML = '';
+
+  const sIdx = slideMap[current]?.sectionIndex;
+  const type = slideMap[current]?.type;
+
+  // Leading A — jumps to agenda overview
+  const aLeft = makeAgendaBtn('dot-a-left');
+  if (type === 'agenda') aLeft.classList.add('active-a');
+  row.appendChild(aLeft);
+
+  AGENDA.forEach((section, i) => {
+    const isCurrent = (i === sIdx);
+    const isDone    = visitedSections.has(i) && !isCurrent;
+
+    const sectionSlideIndices = slideMap
+      .map((m, idx) => ({ m, idx }))
+      .filter(({ m }) => m.sectionIndex === i)
+      .map(({ idx }) => idx);
+    const sc = sectionSlideIndices.length;
+
+    if (isCurrent) {
+      sectionSlideIndices.forEach(slideIdx => {
+        const dot = el('div', 'dot');
+        if (slideIdx === current) dot.classList.add('active');
+        dot.onclick = () => goToSlide(slideIdx);
+        row.appendChild(dot);
+      });
+    } else {
+      const pill = el('div', 'agenda-num-pill');
+      pill.textContent = String(i + 1);
+      pill.title = section.label;
+      if (isDone) pill.classList.add('done');
+      pill.onclick = () => goToSlide(sectionStartSlide(i));
+      const pw = Math.min(28 + (sc - 1) * 8, 62);
+      pill.style.setProperty('--pill-w', pw + 'px');
+      row.appendChild(pill);
+    }
+  });
+
+  // Trailing A — jumps to ending slide (last slide)
+  const aRight = makeAgendaBtn('dot-a-right');
+  aRight.onclick = () => goToSlide(slides.length - 1);
+  aRight.title = 'Ending';
+  if (type === 'end') aRight.classList.add('active-a');
+  row.appendChild(aRight);
+}
+
+// ── NAVIGATION ───────────────────────────────────────────────
+
+function goToSlide(index) {
+  if (index < 0 || index >= slides.length || index === current) return;
+
+  visitedSlides.add(current); // mark current slide as seen before leaving
+  const leavingSection = slideMap[current]?.sectionIndex;
+  if (leavingSection >= 0) {
+    // Only mark section done if every slide in it has been visited
+    const sectionSlides = slideMap
+      .map((m, idx) => ({ m, idx }))
+      .filter(({ m }) => m.sectionIndex === leavingSection)
+      .map(({ idx }) => idx);
+    const allSeen = sectionSlides.every(idx => visitedSlides.has(idx) || idx === current);
+    if (allSeen) visitedSections.add(leavingSection);
+  }
+
+  slides[current].classList.add('exit');
+  slides[current].classList.remove('active');
+  const leaving = current;
+
+  current = index;
+  slides[current].classList.add('active');
+
+  setTimeout(() => slides[leaving].classList.remove('exit'), 350);
+
+  updateUI();
+}
+
+function changeSlide(dir) { goToSlide(current + dir); }
+function goToAgenda() { goToSlide(1); }
+
+function updateUI() {
+  const total = slides.length;
+  const pct = total <= 1 ? 100 : Math.round((current / (total - 1)) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+
+  updateDots();
+
+  // Current agenda number + name (bottom right)
+  const nextTitleEl = document.getElementById('nav-next-title');
+  const curSIdx = slideMap[current]?.sectionIndex;
+  if (curSIdx >= 0) {
+    nextTitleEl.textContent = `${curSIdx + 1}: ${AGENDA[curSIdx].label}`;
+  } else if (current === 0) {
+    nextTitleEl.textContent = '';
+  } else {
+    nextTitleEl.textContent = 'Agenda Overview';
+  }
+
+  document.getElementById('btn-prev').disabled = current === 0;
+  document.getElementById('btn-next').disabled = current === slides.length - 1;
+
+  updateAgendaCards();
+  updateEndingSlide();
+}
+
+// ── RESET ────────────────────────────────────────────────────
+function resetDeck() {
+  visitedSections.clear();
+  visitedSlides.clear();
+  goToSlide(0);
+  // Force UI refresh even if already on slide 0
+  updateUI();
+  // Visual feedback on reset button
+  const btn = document.getElementById('btn-reset');
+  if (btn) {
+    btn.style.color = 'var(--done-color)';
+    btn.style.borderColor = 'var(--done-color)';
+    setTimeout(() => {
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }, 800);
+  }
+}
+
+// ── KEYBOARD ─────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault(); changeSlide(1);
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault(); changeSlide(-1);
+  } else if (e.key === 'a' || e.key === 'A') {
+    goToAgenda();
+  }
+});
+
+// ── INIT ─────────────────────────────────────────────────────
+buildDeck();
+slides[0].classList.add('active');
+updateUI();
+</script>
+</body>
+</html>

@@ -15,7 +15,7 @@ const MEETING_CONFIG = {
   title:    "Direct Report Meeting",
   subtitle: "Weekly alignment on progress, priorities & decisions.",
   by:       "AIS Academy",
-  duration: "45 minutes",
+  duration: "10 minutes",
   // Leave as "" to auto-use today's date, or set e.g. "June 12, 2026"
   date:     "",
 };
@@ -42,23 +42,79 @@ const MEETING_CONFIG = {
  */
 const AGENDA = [
 
+
+// ─────────────────────────────────────────────
+  // 1 —  Harvard
+  // ─────────────────────────────────────────────
+  {
+    label:       "Next Evolution (Harvard)",
+    duration:    "3 min",
+    icon:        "→",
+    description: "Tasks checklists",
+    slides: [
+
+      // ── TEMPLATE: checklist — commitment tracker with owners
+      {
+        type:  "checklist",
+        title: "Before Launch",
+        items: [
+          { text: "Draft Q2 roadmap document",           status: "none",    owner: "Alex · Wed"    },
+          { text: "Escalate legal review to leadership", status: "none",    owner: "Riley · Today" },
+          { text: "Schedule 3 user interviews",          status: "partial", owner: "Morgan · Thu"  },
+          { text: "Patch authentication bug",            status: "none",    owner: "Sam · Tue EOD" },
+          { text: "Complete AWS migration plan",         status: "partial", owner: "Jordan · Fri"  },
+          { text: "Ship beta dashboard",                 status: "none",    owner: "Dev · Thu"     },
+        ],
+      },
+
+      // ── TEMPLATE: timeline — next 30 days
+      {
+        type:  "timeline",
+        title: "Program Outlook",
+        items: [
+          { title: "Module 1 — BBBB", desc: "Close P1 bugs, unblock legal, finalise roadmap",  date: "May 6–10"  },
+          { title: "Module 2 — CCCC",      desc: "Beta dashboard live, user interviews complete",    date: "May 13–17" },
+          { title: "Module 3 — DDDD",     desc: "Roadmap approved, infrastructure decision locked", date: "May 20–24" },
+        ],
+      },
+
+      // ── TEMPLATE: closing — action items + next meeting
+      {
+        type:  "closing",
+        title: "Actions & Next Steps",
+        actions: [
+          "Alex — Draft Q2 roadmap document by Wednesday",
+          "Riley — Escalate legal review timeline to leadership today",
+          "Morgan — Schedule 3 user interviews before Thursday",
+          "Sam — Patch authentication bug by Tuesday EOD",
+          "Jordan — Complete AWS migration plan by Friday",
+        ],
+        next: {
+          when:     "Same time next week",
+          prereads: "Please review the Q2 roadmap draft before the next session.",
+        },
+      },
+
+    ],
+  },
+
   // ─────────────────────────────────────────────
   // 1 — WINS & UPDATES
   // ─────────────────────────────────────────────
   {
-    label:       "Wins & Updates",
-    duration:    "10 min",
+    label:       "Harvard: Next Evolution (Updates)",
+    duration:    "5 min",
     icon:        "✦",
-    description: "Highlights, metrics & team accomplishments",
+    description: "Participants, Schedule, Welcome e-mail, Course Materials",
     slides: [
 
       // ── TEMPLATE: fullbleed — hero image with overlay text
       // ✏️ Replace image URL with your own
       {
         type:    "fullbleed",
-        title:   "A Strong Week",
+        title:   "Progress",
         image:   "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1600&auto=format&fit=crop",
-        caption: "The team shipped two major milestones and exceeded NPS targets for the third week running.",
+        caption: "Finalizing required reading materials, participant",
       },
 
       // ── TEMPLATE: stat — large number callouts
